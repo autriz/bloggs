@@ -1,11 +1,11 @@
 import { auth } from "$lib/server/lucia.js";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
-import argon2 from "argon2";
 import { db } from "$lib/server/database.js";
 import { usersTable } from "$lib/server/schema/users.js";
 import { eq } from "drizzle-orm";
 import { generateId } from "lucia";
+import { argon2Verify } from "hash-wasm";
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.userData && locals.session) throw redirect(302, "/");
@@ -49,10 +49,10 @@ export const actions: Actions = {
 		if (!user) {
 			return fail(400, { message: "Invalid email or password" });
 		}
-		const isValidPassword = await argon2.verify(
-			user.passwordHash,
+		const isValidPassword = await argon2Verify({
+			hash: user.passwordHash,
 			password,
-		);
+		});
 
 		if (isValidPassword) {
 			const session = await auth.createSession(

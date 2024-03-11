@@ -1,13 +1,13 @@
 import { auth } from "$lib/server/lucia.js";
-import { generateId } from "lucia";
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
-import argon2 from "argon2";
+import { argon2i, argon2d, argon2id } from "hash-wasm";
 import { db, client } from "$lib/server/database.js";
 import { usersTable } from "$lib/server/schema/users.js";
+import { getRandomValues } from "node:crypto";
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) throw redirect(302, "/");
+	if (locals.userData) throw redirect(302, "/");
 	return {};
 };
 
@@ -46,7 +46,19 @@ export const actions: Actions = {
 			});
 		}
 
-		const passwordHash = await argon2.hash(password);
+		let salt = new Uint8Array(16);
+		salt = getRandomValues(salt);
+
+		const passwordHash = await argon2id({
+			password,
+			salt,
+			parallelism: 1,
+			iterations: 256,
+			memorySize: 512,
+			hashLength: 32,
+			outputType: "encoded",
+		});
+		// const passwordHash = await argon2.hash(password);
 
 		const [user] = await db
 			.insert(usersTable)
