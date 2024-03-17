@@ -44,7 +44,8 @@
 		"tslib": "^2.6.2",
 		"tsm": "^2.3.0",
 		"typescript": "^5.4.2",
-		"vite": "^5.1.5"
+		"vite": "^5.1.5",
+		"vite-plugin-node-polyfills": "^0.21.0"
 	},
 	"type": "module",
 	"dependencies": {

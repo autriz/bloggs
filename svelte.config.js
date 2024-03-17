@@ -1,16 +1,8 @@
 import { preprocessMeltUI, sequence } from "@melt-ui/pp";
-import { mdsvex, code_highlighter, escapeSvelte } from "mdsvex";
+import { mdsvex, escapeSvelte } from "mdsvex";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import adapter from "@sveltejs/adapter-vercel";
 import { getHighlighter } from "shiki/bundle/full";
-
-/**
- * @param {string} code
- */
-function highlighter(code, lang = "") {
-	console.log(code);
-	return `<pre class="${lang}"><code>${code}</code></pre>`;
-}
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
