@@ -54,6 +54,8 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 		// throw fail(500, { message: "Failed to compile markdown file" });
 		throw error(500, { message: "Failed to download markdown file" });
 
+	console.log(transformedContent);
+
 	return { content: transformedContent };
 };
 

@@ -18,7 +18,11 @@
 				class="text-secondary-foreground mx-auto flex h-14 w-full items-center px-8 md:bg-transparent"
 			>
 				<div>
-					<a href="/" class="flex flex-row items-center gap-1">
+					<a
+						data-sveltekit-preload-data="off"
+						href="/"
+						class="flex flex-row items-center gap-1"
+					>
 						<img src="/pergament.png" class="h-11" alt="logo" />
 						<p
 							class="text-secondary-foreground xs:inline hidden pb-3 text-center text-3xl"
