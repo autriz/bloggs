@@ -15,8 +15,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	logIn: async ({ request, locals, cookies }) => {
 		const formData = await request.formData();
+
 		const email = formData.get("email");
 		const password = formData.get("password");
+
 		// basic check
 		if (
 			typeof email !== "string" ||

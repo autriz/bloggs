@@ -27,7 +27,7 @@
               is also passed down, so you can display headings
               however you want.
             -->
-					{@html heading.node.innerHTML}
+					{@html heading.node.innerText}
 				</a>
 				{#if heading.children && heading.children.length}
 					<svelte:self

@@ -2,6 +2,7 @@
 	import { flyAndScale } from "$lib/utils/transition.js";
 	import { createDropdownMenu, melt } from "@melt-ui/svelte";
 	import { LogOut, Settings, User } from "lucide-svelte";
+	import Link from "./link.svelte";
 
 	export let user: NonNullable<App.Locals["userData"]>;
 
@@ -12,6 +13,30 @@
 		forceVisible: true,
 		loop: true,
 	});
+
+	const options = [
+		{
+			text: "Профиль",
+			component: User,
+			href: `/users/${user?.id}`,
+			type: "normal",
+			preload: "hover",
+		},
+		{
+			text: "Настройки",
+			component: Settings,
+			href: `/settings`,
+			type: "normal",
+			preload: "hover",
+		},
+		{
+			text: "Выход",
+			component: LogOut,
+			href: `/logout`,
+			type: "dangerous",
+			preload: "off",
+		},
+	] as const;
 </script>
 
 <button
@@ -31,14 +56,23 @@
 {#if $open}
 	<div
 		use:melt={$menu}
-		class="z-50 flex w-32 flex-col rounded-md bg-neutral-700 px-1 py-1 shadow-sm shadow-neutral-800"
+		class="bg-secondary z-50 flex w-32 flex-col rounded-md px-1 py-1 shadow-sm shadow-neutral-800"
 		transition:flyAndScale={{
 			duration: 150,
 			y: 0,
 			start: 0.96,
 		}}
 	>
-		<a
+		{#each options as { href, component, text, type, preload }}
+			<Link {href} {text} {type} {item} {preload}>
+				<svelte:component
+					this={component}
+					slot="icon"
+					class="h-5 w-5"
+				/>
+			</Link>
+		{/each}
+		<!-- <a
 			class="flex items-center gap-2 rounded-md
 			px-2 py-1 text-neutral-400 transition-colors
 			data-[highlighted]:bg-neutral-800 data-[highlighted]:text-neutral-300
@@ -71,6 +105,6 @@
 		>
 			<LogOut class="h-5 w-5" />
 			<span class="text-sm font-semibold">Выход</span>
-		</a>
+		</a> -->
 	</div>
 {/if}

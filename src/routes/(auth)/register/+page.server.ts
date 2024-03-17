@@ -1,5 +1,5 @@
 import { auth } from "$lib/server/lucia.js";
-import { fail, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
 import { argon2i, argon2d, argon2id } from "hash-wasm";
 import { db, client } from "$lib/server/database.js";
@@ -23,7 +23,7 @@ export const actions: Actions = {
 			email.length < 6 ||
 			email.length > 60
 		) {
-			return fail(400, {
+			return error(400, {
 				message: "Invalid email",
 			});
 		}
@@ -32,7 +32,7 @@ export const actions: Actions = {
 			username.length < 4 ||
 			username.length > 60
 		) {
-			return fail(400, {
+			return error(400, {
 				message: "Invalid username",
 			});
 		}
@@ -41,7 +41,7 @@ export const actions: Actions = {
 			password.length < 6 ||
 			password.length > 255
 		) {
-			return fail(400, {
+			return error(400, {
 				message: "Invalid password",
 			});
 		}
@@ -86,7 +86,7 @@ export const actions: Actions = {
 			// redirect to /
 			throw redirect(302, "/");
 		} catch (e) {
-			return fail(500, { message: "Failed to create session" });
+			return error(500, { message: "Failed to create session" });
 		}
 	},
 };

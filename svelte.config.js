@@ -1,7 +1,8 @@
 import { preprocessMeltUI, sequence } from "@melt-ui/pp";
-import { mdsvex, code_highlighter } from "mdsvex";
+import { mdsvex, code_highlighter, escapeSvelte } from "mdsvex";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import adapter from "@sveltejs/adapter-vercel";
+import { getHighlighter } from "shiki/bundle/full";
 
 /**
  * @param {string} code
@@ -13,9 +14,23 @@ function highlighter(code, lang = "") {
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
-	extensions: [".svx", ".md"],
+	extensions: [".md", ".svx"],
 	highlight: {
-		highlighter,
+		highlighter: async (code, lang = "text") => {
+			const highlighter = await getHighlighter({
+				themes: ["github-dark", "github-light"],
+				langs: [lang],
+			});
+			//@ts-ignore
+			await highlighter.loadLanguage(lang);
+			const html = escapeSvelte(
+				highlighter.codeToHtml(code, {
+					lang,
+					themes: { dark: "github-dark", light: "github-light" },
+				}),
+			);
+			return html;
+		},
 	},
 };
 
@@ -27,6 +42,7 @@ export default {
 	preprocess: sequence([
 		vitePreprocess({}),
 		preprocessMeltUI(),
+		// @ts-ignore
 		mdsvex(mdsvexOptions),
 	]),
 	kit: {

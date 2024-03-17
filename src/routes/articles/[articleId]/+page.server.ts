@@ -1,8 +1,7 @@
-import { fail } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
 import { compile, escapeSvelte, type MdsvexCompileOptions } from "mdsvex";
-import { getHighlighter } from "shiki";
-import sanitizeHtml from "sanitize-html";
+import { getHighlighter } from "shiki/bundle/full";
 
 const mdsvexOptions: MdsvexCompileOptions = {
 	extensions: [".md", ".svx"],
@@ -29,22 +28,33 @@ const values = {
 	"1": "https://raw.githubusercontent.com/markedjs/marked/master/README.md",
 	"2": "https://raw.githubusercontent.com/huntabyte/shadcn-svelte/main/README.md",
 	"3": "https://raw.githubusercontent.com/shikijs/shiki/main/README.md",
+	"4": "https://raw.githubusercontent.com/cure53/DOMPurify/main/README.md",
+	"5": "https://raw.githubusercontent.com/BearToCode/carta/master/README.md",
 };
 
 export const load: PageServerLoad = async ({ fetch, params }) => {
 	const url = values[params["articleId"] as keyof typeof values];
 
-	if (!url) throw fail(500, { message: "Invalid test url" });
+	if (params["articleId"] === "test") {
+		const testPost = await import("../../test.svx");
+
+		const content = testPost.default.render();
+
+		return { content: { code: content.html, meta: testPost.metadata } };
+	}
+
+	if (!url) throw error(500, { message: "Invalid test url" });
 
 	const response = await fetch(url);
 
 	const content = await response.text();
 	const transformedContent = await compile(content, mdsvexOptions);
 
-	if (!transformedContent)
-		throw fail(500, { message: "Failed to compile markdown file" });
+	if (!content)
+		// throw fail(500, { message: "Failed to compile markdown file" });
+		throw error(500, { message: "Failed to download markdown file" });
 
-	return { content: transformedContent.code };
+	return { content: transformedContent };
 };
 
 export const actions: Actions = {};
