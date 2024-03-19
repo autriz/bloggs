@@ -4,6 +4,67 @@
 		TextInput,
 		ImageInput,
 	} from "$lib/components/settings/index.js";
+
+	export let data;
+
+	let avatarPreview: HTMLImageElement;
+	let imageInput: HTMLInputElement;
+
+	const handleUpload = async (
+		e: Event & {
+			currentTarget: EventTarget & HTMLInputElement;
+		},
+	) => {
+		const files = e.currentTarget.files;
+
+		if (!files) return;
+
+		const file = files[0];
+
+		if (!file) return;
+
+		const reader = new FileReader();
+
+		reader.addEventListener("loadend", async () => {
+			const base64 = reader.result;
+
+			// err
+			if (!base64) return;
+
+			const form = new FormData();
+			form.append("image", base64.toString());
+
+			const res = await fetch(`/api/users/${data.userData!.id}/avatar`, {
+				method: "POST",
+				body: form,
+			});
+
+			if (res.status === 200) {
+				data.userData!.avatar = base64.toString();
+				avatarPreview.src = URL.createObjectURL(file);
+			}
+		});
+
+		reader.readAsDataURL(file);
+	};
+
+	const handlePreview = (
+		e: Event & {
+			currentTarget: EventTarget & HTMLInputElement;
+		},
+	) => {
+		const files = e.currentTarget.files;
+
+		if (files) {
+			const file = files.item(0);
+
+			if (file) {
+				avatarPreview.src = URL.createObjectURL(file);
+			}
+		} else {
+			avatarPreview.src = data.userData!.avatar ?? "";
+		}
+	};
 </script>
 
 <div
@@ -15,9 +76,28 @@
 		<TextInput name="lastName" label="Фамилия" />
 	</SettingSection>
 	<SettingSection title="Аватар">
-		<div class="flex flex-wrap items-center py-[10px]">
-			<div>Preview</div>
-			<input type="file" />
+		<div class="flex flex-col flex-wrap items-center py-[10px]">
+			<div>
+				<img
+					class="h-[200px] w-[200px]"
+					bind:this={avatarPreview}
+					src={data.userData?.avatar}
+					alt="avatar preview"
+				/>
+			</div>
+			<button
+				class="bg-primary/80 hover:bg-primary mt-2 rounded-md px-[10px] py-[7px] text-sm font-bold transition-colors"
+				on:click={() => imageInput.click()}
+			>
+				Сменить аватар
+			</button>
+			<input
+				bind:this={imageInput}
+				accept="image/*"
+				type="file"
+				class="hidden"
+				on:change={(e) => handleUpload(e)}
+			/>
 		</div>
 	</SettingSection>
 	<SettingSection title="Почта">

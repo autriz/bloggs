@@ -1,4 +1,4 @@
-import { articlesTable } from "./articles.js";
+import { articlesTable } from "./articles";
 
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";

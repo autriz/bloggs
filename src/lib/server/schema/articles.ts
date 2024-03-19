@@ -1,4 +1,4 @@
-import { usersTable } from "./users.js";
+import { usersTable } from "./users";
 
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";

@@ -1,5 +1,5 @@
-import { usersTable } from "./users.js";
-import { articlesTable } from "./articles.js";
+import { usersTable } from "./users";
+import { articlesTable } from "./articles";
 
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
