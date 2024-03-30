@@ -19,7 +19,7 @@
 <div
 	class="min-w-screen h-fit min-h-[100dvh] max-w-full bg-background text-secondary-foreground"
 >
-	<div class="relative flex min-h-screen flex-col md:flex-col-reverse">
+	<div class="relative flex min-h-screen !flex-col md:!flex-col-reverse">
 		<div class="flex flex-1">
 			<slot />
 		</div>

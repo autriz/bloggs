@@ -12,7 +12,7 @@
 </script>
 
 {#if !isInAuth}
-	<div class="sticky bottom-0 z-40 bg-primary md:bottom-full">
+	<div class="sticky bottom-0 z-40 bg-primary md:bottom-[none] md:top-0">
 		<header class="mx-auto w-full max-w-[70rem] px-6">
 			<div
 				class="mx-auto flex h-14 w-full items-center px-8 text-secondary-foreground md:bg-transparent"
