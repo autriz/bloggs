@@ -6,6 +6,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (!sessionId) {
 		event.locals.userData = null;
 		event.locals.session = null;
+
 		return resolve(event);
 	}
 

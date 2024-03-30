@@ -1,141 +1,181 @@
 <script lang="ts">
 	import {
 		SettingSection,
+		SectionGroup,
 		TextInput,
-		ImageInput,
 	} from "$lib/components/settings/index.js";
+	import avatarStore from "$lib/stores/avatarStore.js";
+	import { useUploadThing } from "$lib/utils/uploadthing.js";
 
 	export let data;
 
-	let avatarPreview: HTMLImageElement;
 	let imageInput: HTMLInputElement;
+
+	$: isImageUploading = false;
+
+	const { startUpload } = useUploadThing("imageUploader", {
+		onClientUploadComplete: (res: any) => {
+			avatarStore.set(res[0].url);
+
+			const form = new FormData();
+			form.append("avatar_url", res[0].url);
+
+			fetch(`/api/account/avatar`, {
+				method: "POST",
+				body: form,
+			});
+
+			isImageUploading = false;
+		},
+		onUploadError: (err: Error) => {
+			console.log(err);
+			isImageUploading = false;
+		},
+	});
 
 	const handleUpload = async (
 		e: Event & {
 			currentTarget: EventTarget & HTMLInputElement;
 		},
 	) => {
-		const files = e.currentTarget.files;
+		isImageUploading = true;
 
-		if (!files) return;
+		const file = e.currentTarget.files?.[0];
 
-		const file = files[0];
+		if (!file) {
+			isImageUploading = false;
+			return;
+		}
 
-		if (!file) return;
+		// Do something with files
 
-		const reader = new FileReader();
-
-		reader.addEventListener("loadend", async () => {
-			const base64 = reader.result;
-
-			// err
-			if (!base64) return;
-
-			const form = new FormData();
-			form.append("image", base64.toString());
-
-			const res = await fetch(`/api/users/${data.userData!.id}/avatar`, {
-				method: "POST",
-				body: form,
-			});
-
-			if (res.status === 200) {
-				data.userData!.avatar = base64.toString();
-				avatarPreview.src = URL.createObjectURL(file);
-			}
-		});
-
-		reader.readAsDataURL(file);
+		// Then start the upload
+		await startUpload([file]);
 	};
 
-	const handlePreview = (
-		e: Event & {
-			currentTarget: EventTarget & HTMLInputElement;
-		},
-	) => {
-		const files = e.currentTarget.files;
-
-		if (files) {
-			const file = files.item(0);
-
-			if (file) {
-				avatarPreview.src = URL.createObjectURL(file);
-			}
-		} else {
-			avatarPreview.src = data.userData!.avatar ?? "";
-		}
+	const handleChange = (name: string, value: string) => {
+		console.log(name, value);
 	};
 </script>
 
 <div
-	class="mx-auto mt-2 flex w-full flex-col gap-1 md:w-[calc(100%_-_40px)] md:max-w-[1050px]"
+	class="mx-auto my-2 flex w-full flex-col gap-1 md:w-[calc(100%_-_40px)] md:max-w-[1050px]"
 >
 	<SettingSection title="Профиль">
-		<TextInput name="nickname" label="Никнейм" />
-		<TextInput name="firstName" label="Имя" />
-		<TextInput name="lastName" label="Фамилия" />
+		<SectionGroup>
+			<TextInput
+				name="username"
+				label="Никнейм"
+				on:keyup={(v) =>
+					handleChange("username", v.currentTarget.value)}
+			/>
+		</SectionGroup>
+		<SectionGroup>
+			<TextInput
+				name="firstName"
+				label="Имя"
+				on:keyup={(v) =>
+					handleChange("firstName", v.currentTarget.value)}
+			/>
+			<TextInput
+				name="lastName"
+				label="Фамилия"
+				on:keyup={(v) =>
+					handleChange("lastName", v.currentTarget.value)}
+			/>
+		</SectionGroup>
 	</SettingSection>
 	<SettingSection title="Аватар">
-		<div class="flex flex-col flex-wrap items-center py-[10px]">
-			<div>
-				<img
-					class="h-[200px] w-[200px]"
-					bind:this={avatarPreview}
-					src={data.userData?.avatar}
-					alt="avatar preview"
+		<SectionGroup>
+			<div class="ml-[160px] flex w-fit flex-col flex-wrap py-[10px]">
+				<div>
+					<img
+						class="h-[200px] w-[200px] rounded-sm"
+						src={$avatarStore}
+						alt="avatar preview"
+					/>
+				</div>
+				<button
+					disabled={isImageUploading}
+					class="mt-2 w-fit self-center rounded-md bg-primary/80 px-[10px] py-[7px] text-sm font-bold transition-colors hover:bg-primary disabled:bg-primary/60"
+					on:click={() => imageInput.click()}
+				>
+					Сменить аватар
+				</button>
+				<input
+					bind:this={imageInput}
+					accept="image/*"
+					type="file"
+					class="hidden"
+					on:change={(e) => handleUpload(e)}
 				/>
 			</div>
-			<button
-				class="bg-primary/80 hover:bg-primary mt-2 rounded-md px-[10px] py-[7px] text-sm font-bold transition-colors"
-				on:click={() => imageInput.click()}
-			>
-				Сменить аватар
-			</button>
-			<input
-				bind:this={imageInput}
-				accept="image/*"
-				type="file"
-				class="hidden"
-				on:change={(e) => handleUpload(e)}
+		</SectionGroup>
+	</SettingSection>
+	<SettingSection title="Почта" method="POST" action="/api/account/email">
+		<SectionGroup>
+			<TextInput
+				name="current_password"
+				label="Текущий пароль"
+				type="password"
+				autocomplete="off"
+				required
 			/>
-		</div>
+		</SectionGroup>
+		<SectionGroup>
+			<TextInput
+				name="new_email"
+				label="Новая почта"
+				type="email"
+				required
+			/>
+			<TextInput
+				name="new_email_confirm"
+				label="Подтвердите почту"
+				type="email"
+				required
+			/>
+		</SectionGroup>
+		<SectionGroup>
+			<div class="pl-[160px]">
+				<button
+					class="rounded-md bg-primary/80 px-[10px] py-[7px] text-sm font-bold transition-colors hover:bg-primary"
+					type="submit">Подтвердить</button
+				>
+			</div>
+		</SectionGroup>
 	</SettingSection>
-	<SettingSection title="Почта">
-		<TextInput
-			name="currentPassword"
-			label="Текущий пароль"
-			type="password"
-		/>
-		<TextInput name="newEmail" label="Новая почта" type="email" />
-		<TextInput
-			name="confirmNewEmail"
-			label="Подтвердите почту"
-			type="email"
-		/>
-		<div class="pl-[160px]">
-			<button
-				class="bg-primary/80 hover:bg-primary rounded-md px-[10px] py-[7px] text-sm font-bold transition-colors"
-				type="submit">Подтвердить</button
-			>
-		</div>
-	</SettingSection>
-	<SettingSection title="Пароль" method="POST">
-		<TextInput
-			name="currentPassword"
-			label="Текущий пароль"
-			type="password"
-		/>
-		<TextInput name="newPassword" label="Новый пароль" type="password" />
-		<TextInput
-			name="confirmNewPassword"
-			label="Подтвердите пароль"
-			type="password"
-		/>
-		<div class="pl-[160px]">
-			<button
-				class="bg-primary/80 hover:bg-primary rounded-md px-[10px] py-[7px] text-sm font-bold transition-colors"
-				type="submit">Подтвердить</button
-			>
-		</div>
+	<SettingSection title="Пароль" method="POST" action="/api/account/password">
+		<SectionGroup>
+			<TextInput
+				name="current_password"
+				label="Текущий пароль"
+				type="password"
+				autocomplete="off"
+				required
+			/>
+		</SectionGroup>
+		<SectionGroup>
+			<TextInput
+				name="new_password"
+				label="Новый пароль"
+				type="password"
+				required
+			/>
+			<TextInput
+				name="new_password_confirm"
+				label="Подтвердите пароль"
+				type="password"
+				required
+			/>
+		</SectionGroup>
+		<SectionGroup>
+			<div class="pl-[160px]">
+				<button
+					class="rounded-md bg-primary/80 px-[10px] py-[7px] text-sm font-bold transition-colors hover:bg-primary"
+					type="submit">Подтвердить</button
+				>
+			</div>
+		</SectionGroup>
 	</SettingSection>
 </div>

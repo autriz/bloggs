@@ -52,8 +52,23 @@ export async function GET(req) {
 	return json(user);
 }
 
+// create
+export async function POST() {}
+
 // update
-export async function PATCH() {}
+export async function PATCH({ locals, params, request }) {
+	if (!locals.userData || !locals.session)
+		return error(401, { message: "Unauthorized" });
+
+	if (locals.userData.id !== params["userId"])
+		return error(403, { message: "Forbidden" });
+
+	const form = await request.formData();
+
+	console.log(form.entries());
+
+	// await db.update(usersTable).set();
+}
 
 // create / replace
 export async function PUT() {}
@@ -64,6 +79,8 @@ export async function DELETE({ locals, params }) {
 
 	if (locals.userData.id !== params["userId"])
 		return error(403, { message: "Forbidden" });
+
+	return error(500, { message: "Still a no-no zone" });
 
 	await removeUser(params["userId"]);
 

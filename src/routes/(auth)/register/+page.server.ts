@@ -1,7 +1,7 @@
 import { auth } from "$lib/server/lucia.js";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
-import { argon2i, argon2d, argon2id } from "hash-wasm";
+import { argon2id } from "hash-wasm";
 import { db, client } from "$lib/server/database.js";
 import { usersTable } from "$lib/server/schema/users.js";
 import { getRandomValues } from "node:crypto";

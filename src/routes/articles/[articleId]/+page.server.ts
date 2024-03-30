@@ -2,6 +2,8 @@ import { error, fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
 import { compile, escapeSvelte, type MdsvexCompileOptions } from "mdsvex";
 import { getHighlighter } from "shiki/bundle/full";
+import { insertCommentsSchema } from "$lib/server/schema/comments.js";
+import { ZodError } from "zod";
 
 const mdsvexOptions: MdsvexCompileOptions = {
 	extensions: [".md", ".svx"],
@@ -54,9 +56,31 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 		// throw fail(500, { message: "Failed to compile markdown file" });
 		throw error(500, { message: "Failed to download markdown file" });
 
-	console.log(transformedContent);
+	// console.log(transformedContent);
 
 	return { content: transformedContent };
 };
 
-export const actions: Actions = {};
+export const actions: Actions = {
+	newComment: async ({ locals, request, params }) => {
+		const formData = Object.fromEntries(await request.formData());
+
+		try {
+			const input = insertCommentsSchema.parse(formData);
+
+			console.log(input);
+
+			return { success: true, data: null, errors: null };
+		} catch (err) {
+			if (err instanceof ZodError) {
+				const { fieldErrors: errors } = err.flatten();
+				console.log(errors);
+				return fail(400, {
+					success: false,
+					data: formData,
+					errors,
+				});
+			}
+		}
+	},
+};

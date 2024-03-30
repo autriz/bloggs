@@ -12,10 +12,10 @@
 </script>
 
 {#if !isInAuth}
-	<div class="bg-primary sticky bottom-0 z-40 md:bottom-[none] md:top-0">
-		<header class="mx-auto w-full max-w-[72rem] px-6">
+	<div class="sticky bottom-0 z-40 bg-primary md:bottom-[none] md:top-0">
+		<header class="mx-auto w-full max-w-[70rem] px-6">
 			<div
-				class="text-secondary-foreground mx-auto flex h-14 w-full items-center px-8 md:bg-transparent"
+				class="mx-auto flex h-14 w-full items-center px-8 text-secondary-foreground md:bg-transparent"
 			>
 				<div>
 					<a
@@ -25,7 +25,7 @@
 					>
 						<img src="/pergament.png" class="h-11" alt="logo" />
 						<p
-							class="text-secondary-foreground xs:inline hidden pb-3 text-center text-3xl"
+							class="hidden pb-3 text-center text-3xl text-secondary-foreground xs:inline"
 							style="font-family: 'Paper Cut';"
 						>
 							Pergament
@@ -38,7 +38,7 @@
 						<a
 							href="/search"
 							aria-label="Go to search page"
-							class="hover:text-secondary-foreground transition-colors"
+							class="transition-colors hover:text-secondary-foreground"
 						>
 							<Search class="h-5 w-5" />
 							<span class="sr-only">Перейти к поиску</span>

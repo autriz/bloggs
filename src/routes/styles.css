@@ -9,17 +9,6 @@
 	@apply scroll-pt-4 md:scroll-pt-20;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-*::-webkit-scrollbar {
-	display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-* {
-	-ms-overflow-style: none; /* IE and Edge */
-	scrollbar-width: none; /* Firefox */
-}
-
 img {
 	max-width: fit-content;
 	max-height: fit-content;

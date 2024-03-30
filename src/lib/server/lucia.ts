@@ -24,8 +24,8 @@ export const auth = new Lucia(adapter, {
 		name: "session",
 		expires: true,
 		attributes: {
-			secure: dev ? false : true
-		}
+			secure: dev ? false : true,
+		},
 	},
 });
 

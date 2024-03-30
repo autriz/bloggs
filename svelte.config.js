@@ -45,5 +45,8 @@ export default {
 			runtime: "nodejs20.x",
 			// runtime: "edge",
 		}),
+		csrf: {
+			checkOrigin: false,
+		},
 	},
 };

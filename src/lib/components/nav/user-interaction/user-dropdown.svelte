@@ -3,6 +3,7 @@
 	import { createDropdownMenu, melt } from "@melt-ui/svelte";
 	import { LogOut, Settings, User } from "lucide-svelte";
 	import Link from "./link.svelte";
+	import avatarStore from "$lib/stores/avatarStore.js";
 
 	export let user: NonNullable<App.Locals["userData"]>;
 
@@ -48,7 +49,7 @@
 	<!-- svelte-ignore a11y-missing-content -->
 	<img
 		class="block h-[40px] w-[40px] rounded-full bg-contain bg-no-repeat"
-		src={user.avatar}
+		src={$avatarStore}
 		alt="avatar"
 	/>
 	<span class="sr-only">Открыть окно</span>
@@ -56,7 +57,7 @@
 {#if $open}
 	<div
 		use:melt={$menu}
-		class="bg-secondary z-50 flex w-32 flex-col rounded-md px-1 py-1 shadow-sm shadow-neutral-800"
+		class="z-50 flex w-32 flex-col rounded-md bg-secondary px-1 py-1 shadow-sm shadow-neutral-800"
 		transition:flyAndScale={{
 			duration: 150,
 			y: 0,

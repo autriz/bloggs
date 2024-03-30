@@ -2,12 +2,15 @@
 	export let title: string;
 </script>
 
-<form {...$$restProps} class="flex flex-col-reverse md:flex-row-reverse">
-	<div class="bg-card peer flex flex-1 flex-col gap-2 p-[10px]">
+<form
+	{...$$restProps}
+	class="flex flex-col-reverse bg-card md:flex-row-reverse"
+>
+	<div class="peer flex flex-1 flex-col gap-[1px]">
 		<slot />
 	</div>
 	<div
-		class="bg-secondary peer-focus-within:bg-primary p-[20px] pl-[50px] transition-colors md:w-[250px]"
+		class="p-[20px] pl-[50px] transition-colors peer-focus-within:bg-primary md:w-[250px]"
 	>
 		{title}
 	</div>

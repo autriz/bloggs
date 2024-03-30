@@ -2,9 +2,12 @@
 	import "./styles.css";
 	import "./fonts.css";
 	import { Header } from "$lib/components/index.js";
+	import avatarStore from "$lib/stores/avatarStore.js";
 	import { ModeWatcher } from "mode-watcher";
 
 	export let data;
+
+	avatarStore.set(data.userData?.avatar || "");
 </script>
 
 <svelte:head>
@@ -14,11 +17,9 @@
 <ModeWatcher defaultMode="system" />
 
 <div
-	class="bg-background text-secondary-foreground min-w-screen h-fit min-h-screen w-screen"
+	class="min-w-screen h-fit min-h-[100dvh] max-w-full bg-background text-secondary-foreground"
 >
-	<div
-		class="relative flex min-h-screen w-screen flex-col md:flex-col-reverse"
-	>
+	<div class="relative flex min-h-screen flex-col md:flex-col-reverse">
 		<div class="flex flex-1">
 			<slot />
 		</div>

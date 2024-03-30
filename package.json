@@ -53,6 +53,7 @@
 		"@cartamd/plugin-code": "^3.0.1",
 		"@libsql/client": "^0.5.3",
 		"@lucia-auth/adapter-sqlite": "^3.0.0",
+		"@uploadthing/svelte": "6.4.2-canary.78bad92",
 		"carta-md": "^3.5.0",
 		"clsx": "^2.1.0",
 		"dotenv": "^16.4.5",
@@ -63,6 +64,7 @@
 		"lucide-svelte": "^0.351.0",
 		"marked": "^12.0.1",
 		"shiki": "^1.1.7",
+		"uploadthing": "^6.7.0",
 		"zod": "^3.22.4"
 	}
 }
