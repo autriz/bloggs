@@ -43,7 +43,7 @@
 			class="sticky bottom-0 top-36 ml-10 hidden h-fit w-fit max-w-[260px] overflow-y-auto rounded-lg border border-border bg-background p-4 xl:inline"
 		>
 			<p class="font-semibold text-secondary-foreground">На странице</p>
-			<nav>
+			<nav class="max-h-[460px]">
 				{#key $headingsTree}
 					<Tree
 						tree={$headingsTree}

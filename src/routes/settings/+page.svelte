@@ -12,6 +12,8 @@
 	let imageInput: HTMLInputElement;
 
 	$: isImageUploading = false;
+	$: isEmailChanging = false;
+	$: isPasswordChanging = false;
 
 	const { startUpload } = useUploadThing("imageUploader", {
 		onClientUploadComplete: (res: any) => {
@@ -51,6 +53,36 @@
 
 		// Then start the upload
 		await startUpload([file]);
+	};
+
+	const handleSubmit = (
+		e: SubmitEvent & {
+			currentTarget: EventTarget & HTMLFormElement;
+		},
+	) => {
+		e.preventDefault();
+
+		let isPasswordSubmit = e.currentTarget.action.includes("password");
+
+		if (isPasswordSubmit) {
+			isPasswordChanging = true;
+		} else {
+			isEmailChanging = true;
+		}
+
+		let formData = new FormData(e.currentTarget);
+		e.currentTarget.reset();
+
+		fetch(e.currentTarget.action, {
+			method: "POST",
+			body: formData,
+		}).then((res) => {
+			if (isPasswordSubmit) {
+				isPasswordChanging = false;
+			} else {
+				isEmailChanging = false;
+			}
+		});
 	};
 
 	const handleChange = (name: string, value: string) => {
@@ -100,7 +132,11 @@
 					class="mt-2 w-fit self-center rounded-md bg-primary/80 px-[10px] py-[7px] text-sm font-bold transition-colors hover:bg-primary disabled:bg-primary/60"
 					on:click={() => imageInput.click()}
 				>
-					Сменить аватар
+					{#if isImageUploading}
+						Подождите...
+					{:else}
+						Сменить аватар
+					{/if}
 				</button>
 				<input
 					bind:this={imageInput}
@@ -112,10 +148,15 @@
 			</div>
 		</SectionGroup>
 	</SettingSection>
-	<SettingSection title="Почта" method="POST" action="/api/account/email">
+	<SettingSection
+		title="Почта"
+		method="POST"
+		action="/api/account/email"
+		on:submit={handleSubmit}
+	>
 		<SectionGroup>
 			<TextInput
-				name="current_password"
+				name="currentPassword"
 				label="Текущий пароль"
 				type="password"
 				autocomplete="off"
@@ -124,13 +165,13 @@
 		</SectionGroup>
 		<SectionGroup>
 			<TextInput
-				name="new_email"
+				name="newEmail"
 				label="Новая почта"
 				type="email"
 				required
 			/>
 			<TextInput
-				name="new_email_confirm"
+				name="newEmailConfirm"
 				label="Подтвердите почту"
 				type="email"
 				required
@@ -139,16 +180,28 @@
 		<SectionGroup>
 			<div class="pl-[160px]">
 				<button
+					disabled={isEmailChanging}
 					class="rounded-md bg-primary/80 px-[10px] py-[7px] text-sm font-bold transition-colors hover:bg-primary"
-					type="submit">Подтвердить</button
+					type="submit"
 				>
+					{#if isEmailChanging}
+						Подождите...
+					{:else}
+						Подтвердить
+					{/if}
+				</button>
 			</div>
 		</SectionGroup>
 	</SettingSection>
-	<SettingSection title="Пароль" method="POST" action="/api/account/password">
+	<SettingSection
+		title="Пароль"
+		method="POST"
+		action="/api/account/password"
+		on:submit={handleSubmit}
+	>
 		<SectionGroup>
 			<TextInput
-				name="current_password"
+				name="currentPassword"
 				label="Текущий пароль"
 				type="password"
 				autocomplete="off"
@@ -157,13 +210,13 @@
 		</SectionGroup>
 		<SectionGroup>
 			<TextInput
-				name="new_password"
+				name="newPassword"
 				label="Новый пароль"
 				type="password"
 				required
 			/>
 			<TextInput
-				name="new_password_confirm"
+				name="newPasswordConfirm"
 				label="Подтвердите пароль"
 				type="password"
 				required
@@ -172,9 +225,16 @@
 		<SectionGroup>
 			<div class="pl-[160px]">
 				<button
+					disabled={isPasswordChanging}
 					class="rounded-md bg-primary/80 px-[10px] py-[7px] text-sm font-bold transition-colors hover:bg-primary"
-					type="submit">Подтвердить</button
+					type="submit"
 				>
+					{#if isPasswordChanging}
+						Подождите...
+					{:else}
+						Подтвердить
+					{/if}
+				</button>
 			</div>
 		</SectionGroup>
 	</SettingSection>

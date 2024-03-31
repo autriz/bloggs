@@ -6,6 +6,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const articlesTable = sqliteTable("articles", {
 	id: integer("id").primaryKey({ autoIncrement: true }),
+	title: text("title").notNull(),
 	authorId: text("author_id")
 		.notNull()
 		.references(() => usersTable.id),

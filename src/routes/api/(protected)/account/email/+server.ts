@@ -10,9 +10,9 @@ export async function POST({ locals, params, request }) {
 
 	try {
 		const formData = await request.formData();
-		const currentPassword = formData.get("current_password")?.toString();
-		const newEmail = formData.get("new_email")?.toString();
-		const newEmailConfirm = formData.get("new_email_confirm")?.toString();
+		const currentPassword = formData.get("currentPassword")?.toString();
+		const newEmail = formData.get("newEmail")?.toString();
+		const newEmailConfirm = formData.get("newEmailConfirm")?.toString();
 
 		if (!currentPassword || !newEmail || !newEmailConfirm)
 			error(406, { message: "Malformed POST request" });

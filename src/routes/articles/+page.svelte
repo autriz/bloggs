@@ -1,19 +1,65 @@
 <script lang="ts">
+	import Article from "$lib/components/article.svelte";
+
 	export let data;
-	const posts = [1, 2, 3, 4, 5];
+	const posts = [
+		{
+			id: 1,
+			title: "Test 1",
+			author: {
+				id: "n205wf5ietw9ao5",
+				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				username: "test",
+			},
+			createdAt: Date.now(),
+		},
+		{
+			id: 2,
+			title: "Test 2",
+			author: {
+				id: "n205wf5ietw9ao5",
+				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				username: "test",
+			},
+			createdAt: Date.now(),
+		},
+		{
+			id: 3,
+			title: "Test 3",
+			author: {
+				id: "n205wf5ietw9ao5",
+				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				username: "test",
+			},
+			createdAt: Date.now(),
+		},
+		{
+			id: 4,
+			title: "Test 4",
+			author: {
+				id: "n205wf5ietw9ao5",
+				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				username: "test",
+			},
+			createdAt: Date.now(),
+		},
+		{
+			id: 5,
+			title: "Test 5",
+			author: {
+				id: "n205wf5ietw9ao5",
+				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				username: "test",
+			},
+			createdAt: Date.now(),
+		},
+	];
 </script>
 
 <div class="mx-auto w-full max-w-[72rem] px-6">
-	<h1>Posts</h1>
-	<!-- {#each data.posts as post}
-		<a href="/posts/{post.slug}">
-			<h2>{post.title}</h2>
-			<p>{post.date}</p>
-		</a>
-	{/each} -->
-	{#each posts as post}
-		<a href="/articles/{post}">
-			<h2>Post {post}</h2>
-		</a>
-	{/each}
+	<div class="my-3 flex flex-col gap-3">
+		{#each posts as post}
+			<Article article={post} />
+		{/each}
+	</div>
 </div>

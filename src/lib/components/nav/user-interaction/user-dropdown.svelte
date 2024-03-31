@@ -48,7 +48,7 @@
 >
 	<!-- svelte-ignore a11y-missing-content -->
 	<img
-		class="block h-[40px] w-[40px] rounded-full bg-contain bg-no-repeat"
+		class="block h-[40px] w-[40px] rounded-md bg-contain bg-no-repeat"
 		src={$avatarStore}
 		alt="avatar"
 	/>

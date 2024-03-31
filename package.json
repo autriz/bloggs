@@ -56,6 +56,7 @@
 		"@uploadthing/svelte": "6.4.2-canary.78bad92",
 		"carta-md": "^3.5.0",
 		"clsx": "^2.1.0",
+		"dayjs": "^1.11.10",
 		"dotenv": "^16.4.5",
 		"drizzle-orm": "^0.30.1",
 		"hash-wasm": "^4.11.0",

@@ -11,11 +11,15 @@ export async function POST({ locals, params, request }) {
 
 	try {
 		const formData = await request.formData();
-		const currentPassword = formData.get("current_password")?.toString();
-		const newPassword = formData.get("new_password")?.toString();
+		const currentPassword = formData.get("currentPassword");
+		const newPassword = formData.get("newPassword")?.toString();
 		const newPasswordConfirm = formData
-			.get("new_password_confirm")
+			.get("newPasswordConfirm")
 			?.toString();
+
+		console.log(currentPassword);
+		console.log(newPassword);
+		console.log(newPasswordConfirm);
 
 		if (!currentPassword || !newPassword || !newPasswordConfirm)
 			error(406, { message: "Malformed POST request" });
