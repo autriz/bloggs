@@ -10,7 +10,14 @@
 	import avatarStore from "$lib/stores/avatarStore.js";
 	import type { ActionData, PageData } from "./$types.js";
 	import { enhance } from "$app/forms";
+	import { page } from "$app/stores";
 	import clsx from "clsx";
+	import dayjs from "dayjs";
+	import relativeTime from "dayjs/plugin/relativeTime.js";
+	import "dayjs/locale/ru.js";
+
+	dayjs.extend(relativeTime);
+	dayjs.locale("ru");
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -29,7 +36,20 @@
 
 	let content = data.content?.code ?? "";
 
-	const comments: string[] = ["test", "test2", "test3"];
+	let comments: string[] = [];
+
+	if ($page.params["articleId"] === "1") {
+		comments = ["Точно приду!", "Как-то не интересно...", "Будет весело!"];
+	}
+	else {
+		comments = ["Я участвую!", "А мне поставят автомат за это?", "Нет, не поставят"];
+	}
+	
+	// const handleComment = (e: SubmitEvent & {
+	// 	currentTarget: EventTarget & HTMLFormElement;
+	// }) => {
+	// 	comments = 
+	// }
 </script>
 
 <div class="mx-10 mb-[60px] mt-[40px] h-full min-h-full w-full">
@@ -39,6 +59,7 @@
 			{@html content}
 			<!-- <CartaViewer {carta} value={data.content} /> -->
 		</article>
+		{#if $headingsTree.length > 0}
 		<aside
 			class="sticky bottom-0 top-36 ml-10 hidden h-fit w-fit max-w-[260px] overflow-y-auto rounded-lg border border-border bg-background p-4 xl:inline"
 		>
@@ -53,21 +74,23 @@
 				{/key}
 			</nav>
 		</aside>
+		{/if}
 	</div>
 	<div class="mx-auto mt-6 h-fit w-full max-w-[95ch]">
-		<h2 class="text-xl font-semibold">Comments</h2>
+		<h2 class="text-xl font-semibold">Комментарии</h2>
+		<!-- action="?/newComment" -->
 		<form
 			method="POST"
-			action="?/newComment"
 			use:enhance
+			on:submit={(e) => handleComment}
 			class="my-6 flex flex-col space-y-4"
-		>
+			>
 			<div class="flex flex-col space-y-2">
 				<textarea
 					role="textbox"
 					name="content"
 					value={form?.data?.content ?? ""}
-					placeholder="Add new comment"
+					placeholder="Добавить новый комментарий"
 					aria-invalid={!!form?.errors?.text}
 					class={clsx(
 						"box-content min-h-[100px] resize-y overflow-y-auto rounded-md border-2 border-border bg-background p-2 shadow-sm outline-none focus:border-primary",
@@ -75,7 +98,7 @@
 				/>
 				{#if !form?.success && form?.errors}
 					<span class="text-sm text-red-500"
-						>Something went wrong</span
+						>Что-то пошло не так</span
 					>
 				{/if}
 			</div>
@@ -83,7 +106,7 @@
 				type="submit"
 				class="text-md w-32 rounded-md bg-primary/80 px-3 py-2 hover:bg-primary"
 			>
-				Comment
+				Отправить
 			</button>
 		</form>
 		<!-- comments -->
@@ -105,8 +128,8 @@
 								>
 							</div>
 							<div class="ml-2">
-								<a class="font-semibold">username</a>
-								<time class="text-neutral-500">8h ago</time>
+								<a class="font-semibold">{data.userData?.username}</a>
+								<time class="text-neutral-500">{dayjs(Date.now()).fromNow()}</time>
 							</div>
 						</div>
 						<div class="grid grid-cols-[48px_1fr]">
@@ -117,8 +140,7 @@
 				{/each}
 			{:else}
 				<p class="text-center">
-					Comment section is empty. Be the one to start a
-					conversation!
+					Оставьте комментарий первым!
 				</p>
 			{/if}
 		</section>

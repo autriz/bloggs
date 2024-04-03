@@ -98,6 +98,7 @@
 			<TextInput
 				name="username"
 				label="Никнейм"
+				value={data.userData?.username}
 				on:keyup={(v) =>
 					handleChange("username", v.currentTarget.value)}
 			/>
@@ -106,12 +107,14 @@
 			<TextInput
 				name="firstName"
 				label="Имя"
+				value={data.userData?.firstName}
 				on:keyup={(v) =>
 					handleChange("firstName", v.currentTarget.value)}
 			/>
 			<TextInput
 				name="lastName"
 				label="Фамилия"
+				value={data.userData?.lastName}
 				on:keyup={(v) =>
 					handleChange("lastName", v.currentTarget.value)}
 			/>
