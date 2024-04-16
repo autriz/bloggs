@@ -34,31 +34,42 @@ const values = {
 	"5": "https://raw.githubusercontent.com/BearToCode/carta/master/README.md",
 };
 
+const internal_values = {
+	"1": "../../../posts/1.svx",
+	"2": "../../../posts/2.svx",
+};
+
 export const load: PageServerLoad = async ({ fetch, params }) => {
-	const url = values[params["articleId"] as keyof typeof values];
+	const url = internal_values[params["articleId"] as keyof typeof internal_values];
 
-	if (params["articleId"] === "test") {
-		const testPost = await import("../../test.svx");
+	// if (params["articleId"] === "test") {
+	// 	const testPost = await import("../../test.svx");
 
-		const content = testPost.default.render();
+	// 	const content = testPost.default.render();
 
-		return { content: { code: content.html, meta: testPost.metadata } };
-	}
+	// 	return { content: { code: content.html, meta: testPost.metadata } };
+	// }
 
-	if (!url) throw error(500, { message: "Invalid test url" });
+	const testPost = await import(url);
 
-	const response = await fetch(url);
+	const content = testPost.default.render();
 
-	const content = await response.text();
-	const transformedContent = await compile(content, mdsvexOptions);
+	return { content: { code: content.html, meta: testPost.metadata } };
 
-	if (!content)
+	// if (!url) throw error(500, { message: "Invalid test url" });
+
+	// const response = await fetch(url);
+
+	// const content = await response.text();
+	// const transformedContent = await compile(content, mdsvexOptions);
+
+	// if (!content)
 		// throw fail(500, { message: "Failed to compile markdown file" });
-		throw error(500, { message: "Failed to download markdown file" });
+		// throw error(500, { message: "Failed to download markdown file" });
 
 	// console.log(transformedContent);
 
-	return { content: transformedContent };
+	// return { content: transformedContent };
 };
 
 export const actions: Actions = {

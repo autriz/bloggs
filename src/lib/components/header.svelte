@@ -25,7 +25,7 @@
 					>
 						<img src="/pergament.png" class="h-11" alt="logo" />
 						<p
-							class="hidden pb-3 text-center text-3xl text-secondary-foreground xs:inline"
+							class="hidden pb-3 text-center text-3xl text-white xs:inline"
 							style="font-family: 'Paper Cut';"
 						>
 							Pergament
