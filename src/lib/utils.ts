@@ -3,7 +3,7 @@ import DOMPurify from "isomorphic-dompurify";
 import { Carta } from "carta-md";
 import { code } from "@cartamd/plugin-code";
 import { anchor } from "@cartamd/plugin-anchor";
-import { getHighlighter } from "shiki/bundle/full";
+import { getHighlighter } from "shiki/dist/bundle-full.mjs";
 
 type DateStyle = Intl.DateTimeFormatOptions["dateStyle"];
 
@@ -18,7 +18,7 @@ export function formatDate(
 	return dateFormatter.format(dateToFormat);
 }
 
-export function getCarta() {
+export function getCarta(): Carta {
 	return new Carta({
 		sanitizer: DOMPurify.sanitize,
 		extensions: [
@@ -39,7 +39,6 @@ export function getCarta() {
 								light: "github-light",
 							},
 						});
-						console.log(html);
 						return html;
 					},
 					langPrefix: "language-",

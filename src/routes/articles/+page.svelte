@@ -8,7 +8,7 @@
 			title: "Test 1",
 			author: {
 				id: "n205wf5ietw9ao5",
-				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
 				username: "test",
 			},
 			createdAt: Date.now(),
@@ -18,7 +18,7 @@
 			title: "Test 2",
 			author: {
 				id: "n205wf5ietw9ao5",
-				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
 				username: "test",
 			},
 			createdAt: Date.now(),
@@ -28,7 +28,7 @@
 			title: "Test 3",
 			author: {
 				id: "n205wf5ietw9ao5",
-				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
 				username: "test",
 			},
 			createdAt: Date.now(),
@@ -38,7 +38,7 @@
 			title: "Test 4",
 			author: {
 				id: "n205wf5ietw9ao5",
-				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
 				username: "test",
 			},
 			createdAt: Date.now(),
@@ -48,7 +48,7 @@
 			title: "Test 5",
 			author: {
 				id: "n205wf5ietw9ao5",
-				avatar: "https://utfs.io/f/6ecddcce-1ebe-4d63-acae-d151da49cd49-ouy1ta.jpg",
+				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
 				username: "test",
 			},
 			createdAt: Date.now(),

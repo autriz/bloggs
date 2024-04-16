@@ -34,16 +34,6 @@
 				</div>
 				<div class="grow" />
 				<nav class="flex items-center gap-3">
-					<Tooltip text="Поиск">
-						<a
-							href="/search"
-							aria-label="Go to search page"
-							class="transition-colors hover:text-secondary-foreground"
-						>
-							<Search class="h-5 w-5" />
-							<span class="sr-only">Перейти к поиску</span>
-						</a>
-					</Tooltip>
 					<ThemeSwitch />
 					<UserInteraction user={data.userData} />
 				</nav>

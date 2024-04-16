@@ -6,6 +6,8 @@
 	} from "$lib/components/settings/index.js";
 	import avatarStore from "$lib/stores/avatarStore.js";
 	import { useUploadThing } from "$lib/utils/uploadthing.js";
+	import { onDestroy } from "svelte";
+	import { writable } from "svelte/store";
 
 	export let data;
 
@@ -14,6 +16,33 @@
 	$: isImageUploading = false;
 	$: isEmailChanging = false;
 	$: isPasswordChanging = false;
+
+	const debouncedStores = writable<{
+		[key: string]: {
+			timer: NodeJS.Timeout | undefined;
+			value: string | undefined;
+		};
+	}>({
+		username: {
+			timer: undefined,
+			value: data.userData!.username,
+		},
+		firstName: {
+			timer: undefined,
+			value: data.userData!.firstName,
+		},
+		lastName: {
+			timer: undefined,
+			value: data.userData!.lastName,
+		},
+	});
+
+	// const debounce = (name: string, value: string) => {
+	// 	clearTimeout(timer);
+	// 	timer = setTimeout(() => {
+	// 		val = v;
+	// 	}, 750);
+	// };
 
 	const { startUpload } = useUploadThing("imageUploader", {
 		onClientUploadComplete: (res: any) => {
@@ -88,6 +117,23 @@
 	const handleChange = (name: string, value: string) => {
 		console.log(name, value);
 	};
+
+	const handleDebouncedChange = (
+		name: "username" | "firstName" | "lastName",
+		value: string,
+	) => {
+		// clearTimeout(timer);
+		// timer = setTimeout(() => {
+		// 	val = v;
+		// }, 750);
+		console.log($debouncedStores[name].value);
+	};
+
+	onDestroy(() => {
+		Object.values($debouncedStores).forEach((store) => {
+			if (store.timer) clearTimeout(store.timer);
+		});
+	});
 </script>
 
 <div
@@ -98,20 +144,23 @@
 			<TextInput
 				name="username"
 				label="Никнейм"
+				bind:value={$debouncedStores["username"].value}
 				on:keyup={(v) =>
-					handleChange("username", v.currentTarget.value)}
+					handleDebouncedChange("username", v.currentTarget.value)}
 			/>
 		</SectionGroup>
 		<SectionGroup>
 			<TextInput
 				name="firstName"
 				label="Имя"
+				bind:value={$debouncedStores["firstName"].value}
 				on:keyup={(v) =>
 					handleChange("firstName", v.currentTarget.value)}
 			/>
 			<TextInput
 				name="lastName"
 				label="Фамилия"
+				bind:value={$debouncedStores["lastName"].value}
 				on:keyup={(v) =>
 					handleChange("lastName", v.currentTarget.value)}
 			/>
