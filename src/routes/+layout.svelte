@@ -2,12 +2,13 @@
 	import "./styles.css";
 	import "./fonts.css";
 	import { Header } from "$lib/components/index.js";
-	import avatarStore from "$lib/stores/avatarStore.js";
+	import userStore from "$lib/stores/userStore.js";
 	import { ModeWatcher } from "mode-watcher";
 
 	export let data;
 
-	avatarStore.set(data.userData?.avatar || "");
+	if (!data.session) $userStore = undefined;
+	else $userStore = data.userData ?? undefined;
 </script>
 
 <svelte:head>

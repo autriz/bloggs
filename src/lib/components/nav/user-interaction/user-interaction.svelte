@@ -10,7 +10,7 @@
 	<Tooltip text="Написать пост">
 		<a
 			href="/articles/new"
-			class="hover:text-secondary-foreground transition-colors"
+			class="transition-colors hover:text-secondary-foreground"
 		>
 			<PencilLine class="h-5 w-5" />
 			<span class="sr-only">Написать пост</span>
@@ -18,5 +18,5 @@
 	</Tooltip>
 	<UserDropdown {user} />
 {:else}
-	<a href="/login">Log in</a>
+	<a href="/login">Войти</a>
 {/if}

@@ -2,6 +2,8 @@ import { error, json } from "@sveltejs/kit";
 import type { Article } from "$lib/types.js";
 import { db } from "$lib/server/database.js";
 import { articlesTable } from "$lib/server/schema/articles.js";
+import { eq, getTableColumns } from "drizzle-orm";
+import { usersTable } from "$lib/server/schema/users.js";
 
 async function getArticles() {
 	// let articles: Article[] = [];
@@ -22,9 +24,25 @@ async function getArticles() {
 	// articles = articles.sort(
 	// 	(first, second) =>
 	// 		new Date(second.date).getTime() - new Date(first.date).getTime(),
-	// );
+	// );'
 
-	const articles = await db.select().from(articlesTable);
+	const article = getTableColumns(articlesTable);
+	const user = getTableColumns(usersTable);
+
+	const articles = await db
+		.select({
+			id: article.id,
+			title: article.title,
+			titleImage: article.titleImage,
+			author: {
+				id: user.id,
+				username: user.username,
+				avatar: user.avatar,
+			},
+			createdAt: article.createdAt,
+		})
+		.from(articlesTable)
+		.leftJoin(usersTable, eq(user.id, article.authorId));
 
 	return articles;
 }

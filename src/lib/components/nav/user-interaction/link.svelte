@@ -14,7 +14,7 @@
 		type === "normal"
 			? "data-[highlighted]:text-secondary-foreground/80"
 			: "data-[highlighted]:text-red-600",
-		"data-[highlighted]:bg-secondary-foreground/10 text-secondary-foreground/60 flex items-center gap-2 rounded-md px-2 py-1 transition-colors",
+		"flex items-center gap-2 rounded-md px-2 py-1 text-secondary-foreground/60 transition-colors data-[highlighted]:bg-secondary-foreground/10",
 	)}
 	{href}
 	use:melt={$item}

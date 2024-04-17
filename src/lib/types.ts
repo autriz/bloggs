@@ -1,10 +1,18 @@
 export type Categories = "sveltekit" | "svelte";
 
 export type Article = {
+	id: number;
 	title: string;
-	slug: string;
-	description: string;
-	date: string;
-	categories: Categories[];
-	published: boolean;
+	titleImage: string;
+	author: {
+		id: string;
+		username: string;
+		avatar: string;
+	};
+	createdAt: Date;
+};
+
+export type FullArticle = Article & {
+	updatedAt: Date;
+	content: string;
 };

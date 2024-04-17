@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import {
 		SettingSection,
 		SectionGroup,
 		TextInput,
 	} from "$lib/components/settings/index.js";
-	import avatarStore from "$lib/stores/avatarStore.js";
+	import userStore from "$lib/stores/userStore.js";
 	import { useUploadThing } from "$lib/utils/uploadthing.js";
 	import { onDestroy } from "svelte";
-	import { writable } from "svelte/store";
+	import { get, writable, type Writable } from "svelte/store";
 
 	export let data;
 
@@ -17,25 +18,28 @@
 	$: isEmailChanging = false;
 	$: isPasswordChanging = false;
 
-	const debouncedStores = writable<{
-		[key: string]: {
-			timer: NodeJS.Timeout | undefined;
+	let debouncedStores: {
+		[key: string]: Writable<{
+			timer: NodeJS.Timeout;
 			value: string | undefined;
-		};
-	}>({
-		username: {
+		}>;
+	} = {
+		username: writable({
 			timer: undefined,
 			value: data.userData!.username,
-		},
-		firstName: {
+		}),
+		firstName: writable({
 			timer: undefined,
 			value: data.userData!.firstName,
-		},
-		lastName: {
+		}),
+		lastName: writable({
 			timer: undefined,
 			value: data.userData!.lastName,
-		},
-	});
+		}),
+	};
+
+	console.log(data.userData);
+	console.log(get(debouncedStores["username"]));
 
 	// const debounce = (name: string, value: string) => {
 	// 	clearTimeout(timer);
@@ -46,7 +50,14 @@
 
 	const { startUpload } = useUploadThing("imageUploader", {
 		onClientUploadComplete: (res: any) => {
-			avatarStore.set(res[0].url);
+			userStore.update((user) => {
+				if (!user)
+					goto("/", { replaceState: true, invalidateAll: true });
+
+				user!.avatar = res[0].url;
+
+				return user;
+			});
 
 			const form = new FormData();
 			form.append("avatar_url", res[0].url);
@@ -126,11 +137,12 @@
 		// timer = setTimeout(() => {
 		// 	val = v;
 		// }, 750);
-		console.log($debouncedStores[name].value);
+		console.log(debouncedStores);
+		console.log(debouncedStores[name]);
 	};
 
 	onDestroy(() => {
-		Object.values($debouncedStores).forEach((store) => {
+		Object.values(debouncedStores).forEach((store) => {
 			if (store.timer) clearTimeout(store.timer);
 		});
 	});
@@ -144,7 +156,7 @@
 			<TextInput
 				name="username"
 				label="Никнейм"
-				bind:value={$debouncedStores["username"].value}
+				bind:value={debouncedStores["username"].value}
 				on:keyup={(v) =>
 					handleDebouncedChange("username", v.currentTarget.value)}
 			/>
@@ -153,16 +165,16 @@
 			<TextInput
 				name="firstName"
 				label="Имя"
-				bind:value={$debouncedStores["firstName"].value}
+				bind:value={debouncedStores["firstName"].value}
 				on:keyup={(v) =>
-					handleChange("firstName", v.currentTarget.value)}
+					handleDebouncedChange("firstName", v.currentTarget.value)}
 			/>
 			<TextInput
 				name="lastName"
 				label="Фамилия"
-				bind:value={$debouncedStores["lastName"].value}
+				bind:value={debouncedStores["lastName"].value}
 				on:keyup={(v) =>
-					handleChange("lastName", v.currentTarget.value)}
+					handleDebouncedChange("lastName", v.currentTarget.value)}
 			/>
 		</SectionGroup>
 	</SettingSection>
@@ -172,7 +184,7 @@
 				<div>
 					<img
 						class="h-[200px] w-[200px] rounded-sm"
-						src={$avatarStore}
+						src={$userStore?.avatar}
 						alt="avatar preview"
 					/>
 				</div>

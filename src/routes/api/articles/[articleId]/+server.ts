@@ -4,12 +4,16 @@ import { error, json } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 
 export async function GET(req) {
-	const [post] = await db
+	const [article] = await db
 		.select()
 		.from(articlesTable)
 		.where(eq(articlesTable.id, Number(req.params["articleId"])));
 
-	return json(post);
+	if (!article) {
+		throw error(404, { message: "Article not found" });
+	}
+
+	return json(article);
 }
 
 export async function PATCH() {}

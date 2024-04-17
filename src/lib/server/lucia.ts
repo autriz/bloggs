@@ -44,8 +44,8 @@ interface DatabaseSessionAttributes {}
 interface DatabaseUserAttributes {
 	username: string;
 	email: string;
-	firstName?: string;
-	lastName?: string;
-	avatar?: string;
-	aboutMe?: string;
+	firstName: string | null;
+	lastName: string | null;
+	avatar: string | null;
+	aboutMe: string | null;
 }

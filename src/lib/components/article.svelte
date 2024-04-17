@@ -2,20 +2,12 @@
 	import dayjs from "dayjs";
 	import relativeTime from "dayjs/plugin/relativeTime.js";
 	import "dayjs/locale/ru.js";
+	import type { Article } from "$lib/types.js";
 
 	dayjs.extend(relativeTime);
 	dayjs.locale("ru");
 
-	export let article: {
-		id: number;
-		title: string;
-		author: {
-			id: string;
-			avatar: string;
-			username: string;
-		};
-		createdAt: number;
-	};
+	export let article: Article;
 </script>
 
 <div

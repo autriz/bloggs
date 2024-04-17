@@ -1,4 +1,5 @@
 import { auth } from "$lib/server/lucia.js";
+import userStore from "$lib/stores/userStore.js";
 import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -27,6 +28,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	event.locals.userData = user;
 	event.locals.session = session;
+
+	userStore.set(user ?? undefined);
 
 	return await resolve(event);
 };

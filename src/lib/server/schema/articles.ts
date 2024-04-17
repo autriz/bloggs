@@ -10,6 +10,7 @@ export const articlesTable = sqliteTable("articles", {
 	authorId: text("author_id")
 		.notNull()
 		.references(() => usersTable.id),
+	titleImage: text("title_image"),
 	createdAt: integer("created_at", { mode: "timestamp" }).default(
 		sql`(strftime('%s', 'now'))`,
 	),

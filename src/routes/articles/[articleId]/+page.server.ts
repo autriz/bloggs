@@ -4,6 +4,7 @@ import { compile, escapeSvelte, type MdsvexCompileOptions } from "mdsvex";
 import { getHighlighter } from "shiki/bundle/full";
 import { insertCommentsSchema } from "$lib/server/schema/comments.js";
 import { ZodError } from "zod";
+import type { Article, FullArticle } from "$lib/types.js";
 
 const mdsvexOptions: MdsvexCompileOptions = {
 	extensions: [".md", ".svx"],
@@ -40,36 +41,21 @@ const internal_values = {
 };
 
 export const load: PageServerLoad = async ({ fetch, params }) => {
-	const url = internal_values[params["articleId"] as keyof typeof internal_values];
+	const response = await fetch("/api/articles/" + params["articleId"]);
 
-	// if (params["articleId"] === "test") {
-	// 	const testPost = await import("../../test.svx");
+	if (response.status !== 200) {
+		const { message } = await response.json();
 
-	// 	const content = testPost.default.render();
+		throw error(response.status, { message });
+	}
 
-	// 	return { content: { code: content.html, meta: testPost.metadata } };
-	// }
+	let { content, ...articleData }: FullArticle = await response.json();
 
-	const testPost = await import(url);
+	content = content.replaceAll("\\n", "\n");
 
-	const content = testPost.default.render();
+	const transformedContent = await compile(content, mdsvexOptions);
 
-	return { content: { code: content.html, meta: testPost.metadata } };
-
-	// if (!url) throw error(500, { message: "Invalid test url" });
-
-	// const response = await fetch(url);
-
-	// const content = await response.text();
-	// const transformedContent = await compile(content, mdsvexOptions);
-
-	// if (!content)
-		// throw fail(500, { message: "Failed to compile markdown file" });
-		// throw error(500, { message: "Failed to download markdown file" });
-
-	// console.log(transformedContent);
-
-	// return { content: transformedContent };
+	return { content: transformedContent, meta: articleData };
 };
 
 export const actions: Actions = {
