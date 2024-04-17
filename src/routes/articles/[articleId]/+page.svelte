@@ -36,15 +36,51 @@
 
 	let content = data.content?.code ?? "";
 
-	let comments: string[] = [];
+	let comments: { userId: string, username: string; avatar: string; content: string; }[] = [];
 
 	if ($page.params["articleId"] === "1") {
-		comments = ["Точно приду!", "Как-то не интересно...", "Будет весело!"];
-	} else {
 		comments = [
-			"Я участвую!",
-			"А мне поставят автомат за это?",
-			"Нет, не поставят",
+			{
+				userId: "6dpykmvjtr3xg5y6pmc3",
+				username: "хлюпа",
+				avatar: "https://utfs.io/f/cc3a65d7-d9e5-45da-befb-e7ad728c84c3-930vqs.jpg",
+				content: "Точно приду!"
+			},
+			{
+				userId: "mgm9no53yj16p5i1y6jq",
+				username: "leoneet",
+				avatar: "https://utfs.io/f/3506557e-6a30-41cc-a66f-4549a142cdc8-nqxk2l.jpg",
+				content: "Будет весело!"
+			}, 
+			{
+				userId: "n205wf5ietw9ao5",
+				username: "autriz",
+				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
+				content: "Как-то не интересно..."
+			}
+		];
+	}
+	else {
+		// comments = ["Я участвую!", "А мне поставят автомат за это?", "Нет, не поставят"];
+		comments = [
+			{
+				userId: "6dpykmvjtr3xg5y6pmc3",
+				username: "хлюпа",
+				avatar: "https://utfs.io/f/cc3a65d7-d9e5-45da-befb-e7ad728c84c3-930vqs.jpg",
+				content: "Точно приду!"
+			},
+			{
+				userId: "mgm9no53yj16p5i1y6jq",
+				username: "leoneet",
+				avatar: "https://utfs.io/f/3506557e-6a30-41cc-a66f-4549a142cdc8-nqxk2l.jpg",
+				content: "Будет весело!"
+			}, 
+			{
+				userId: "n205wf5ietw9ao5",
+				username: "autriz",
+				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
+				content: "Как-то не интересно..."
+			}
 		];
 	}
 
@@ -121,20 +157,23 @@
 					<div>
 						<div class="grid grid-cols-[48px_1fr] items-center">
 							<div>
-								<a
-									><img
-										src={$userStore?.avatar}
+								<a href="/users/{comment.userId}">
+									<img
+										src={comment.avatar}
 										class="rounded-md"
 										alt="avatar"
 										height="48"
 										width="48"
-									/></a
-								>
+									/>
+								</a>
 							</div>
 							<div class="ml-2">
-								<a class="font-semibold"
-									>{data.userData?.username}</a
+								<a 
+									class="font-semibold"
+									href="/users/{comment.userId}"
 								>
+									{comment.username}
+								</a>
 								<time class="text-neutral-500"
 									>{dayjs(Date.now()).fromNow()}</time
 								>
@@ -142,7 +181,7 @@
 						</div>
 						<div class="grid grid-cols-[48px_1fr]">
 							<div></div>
-							<span class="ml-3">{comment}</span>
+							<span class="ml-3">{comment.content}</span>
 						</div>
 					</div>
 				{/each}
