@@ -1,7 +1,9 @@
 import { db } from "$lib/server/database.js";
 import { articlesTable } from "$lib/server/schema/articles.js";
+import { commentsTable } from "$lib/server/schema/comments.js";
+import { usersTable } from "$lib/server/schema/users.js";
 import { error, json } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export async function GET(req) {
 	const [article] = await db
@@ -13,7 +15,25 @@ export async function GET(req) {
 		throw error(404, { message: "Article not found" });
 	}
 
-	return json(article);
+	const comments = await db
+		.select({
+			id: commentsTable.id,
+			articleId: commentsTable.articleId,
+			author: {
+				id: usersTable.id,
+				avatar: usersTable.avatar,
+				username: usersTable.username,
+			},
+			createdAt: commentsTable.createdAt,
+			updatedAt: commentsTable.updatedAt,
+			content: commentsTable.content,
+		})
+		.from(commentsTable)
+		.where(eq(commentsTable.articleId, article.id))
+		.leftJoin(usersTable, eq(commentsTable.authorId, usersTable.id))
+		.orderBy(desc(commentsTable.createdAt));
+
+	return json({ ...article, comments });
 }
 
 export async function PATCH() {}

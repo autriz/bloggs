@@ -15,6 +15,7 @@
 	import dayjs from "dayjs";
 	import relativeTime from "dayjs/plugin/relativeTime.js";
 	import "dayjs/locale/ru.js";
+	import type { Comment } from "$lib/types.js";
 
 	dayjs.extend(relativeTime);
 	dayjs.locale("ru");
@@ -36,59 +37,7 @@
 
 	let content = data.content?.code ?? "";
 
-	let comments: { userId: string, username: string; avatar: string; content: string; }[] = [];
-
-	if ($page.params["articleId"] === "1") {
-		comments = [
-			{
-				userId: "6dpykmvjtr3xg5y6pmc3",
-				username: "хлюпа",
-				avatar: "https://utfs.io/f/cc3a65d7-d9e5-45da-befb-e7ad728c84c3-930vqs.jpg",
-				content: "Точно приду!"
-			},
-			{
-				userId: "mgm9no53yj16p5i1y6jq",
-				username: "leoneet",
-				avatar: "https://utfs.io/f/3506557e-6a30-41cc-a66f-4549a142cdc8-nqxk2l.jpg",
-				content: "Будет весело!"
-			}, 
-			{
-				userId: "n205wf5ietw9ao5",
-				username: "autriz",
-				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
-				content: "Как-то не интересно..."
-			}
-		];
-	}
-	else {
-		// comments = ["Я участвую!", "А мне поставят автомат за это?", "Нет, не поставят"];
-		comments = [
-			{
-				userId: "6dpykmvjtr3xg5y6pmc3",
-				username: "хлюпа",
-				avatar: "https://utfs.io/f/cc3a65d7-d9e5-45da-befb-e7ad728c84c3-930vqs.jpg",
-				content: "Точно приду!"
-			},
-			{
-				userId: "mgm9no53yj16p5i1y6jq",
-				username: "leoneet",
-				avatar: "https://utfs.io/f/3506557e-6a30-41cc-a66f-4549a142cdc8-nqxk2l.jpg",
-				content: "Будет весело!"
-			}, 
-			{
-				userId: "n205wf5ietw9ao5",
-				username: "autriz",
-				avatar: "https://utfs.io/f/ce294921-030b-4ca8-b520-16aa90dfd811-asmh7d.png",
-				content: "Как-то не интересно..."
-			}
-		];
-	}
-
-	const handleComment = (
-		e: SubmitEvent & {
-			currentTarget: EventTarget & HTMLFormElement;
-		},
-	) => {};
+	let comments: Comment[] = [...data.meta.comments];
 </script>
 
 <div class="mx-10 mb-[60px] mt-[40px] h-full min-h-full w-full">
@@ -119,36 +68,57 @@
 	</div>
 	<div class="mx-auto mt-6 h-fit w-full max-w-[95ch]">
 		<h2 class="text-xl font-semibold">Комментарии</h2>
-		<!-- action="?/newComment" -->
-		<form
-			method="POST"
-			use:enhance
-			on:submit={(e) => handleComment}
-			class="my-6 flex flex-col space-y-4"
-		>
-			<div class="flex flex-col space-y-2">
-				<textarea
-					role="textbox"
-					name="content"
-					value={form?.data?.content ?? ""}
-					placeholder="Добавить новый комментарий"
-					aria-invalid={!!form?.errors?.text}
-					class={clsx(
-						"box-content min-h-[100px] resize-y overflow-y-auto rounded-md border-2 border-border bg-background p-2 shadow-sm outline-none focus:border-primary",
-					)}
-				/>
-				{#if !form?.success && form?.errors}
-					<span class="text-sm text-red-500">Что-то пошло не так</span
-					>
-				{/if}
-			</div>
-			<button
-				type="submit"
-				class="text-md w-32 rounded-md bg-primary/80 px-3 py-2 hover:bg-primary"
+		{#if data.session && data.userData}
+			<form
+				action="?/newComment"
+				method="POST"
+				use:enhance={(data) => {
+					return async ({ result, update }) => {
+						comments = [result.data.data, ...comments];
+
+						await update({ reset: true, invalidateAll: true });
+					};
+				}}
+				class="my-6 flex flex-col space-y-4"
 			>
-				Отправить
-			</button>
-		</form>
+				<div class="flex flex-col space-y-2">
+					<textarea
+						role="textbox"
+						name="content"
+						placeholder="Добавить новый комментарий"
+						aria-invalid={!!form?.errors?.text}
+						class={clsx(
+							"box-content min-h-[100px] resize-y overflow-y-auto rounded-md border-2 border-border bg-background p-2 shadow-sm outline-none focus:border-primary",
+						)}
+					/>
+				</div>
+				<div class="flex flex-row space-x-2">
+					<button
+						type="submit"
+						class="text-md w-32 rounded-md bg-primary/80 px-3 py-2 hover:bg-primary"
+					>
+						Отправить
+					</button>
+					{#if !form?.success && form?.errors}
+						<span class="m-auto text-sm text-red-500">
+							Что-то пошло не так
+						</span>
+					{/if}
+				</div>
+			</form>
+		{:else}
+			<div class="my-6 flex h-[100px] items-center justify-center">
+				<p>
+					<a
+						href="/login"
+						class="text-primary/80 transition-colors hover:text-primary"
+					>
+						Авторизуйтесь
+					</a>
+					для написания комментариев
+				</p>
+			</div>
+		{/if}
 		<!-- comments -->
 		<section class="flex flex-col gap-4">
 			{#if comments.length > 0}
@@ -157,9 +127,9 @@
 					<div>
 						<div class="grid grid-cols-[48px_1fr] items-center">
 							<div>
-								<a href="/users/{comment.userId}">
+								<a href="/users/{comment.author.id}">
 									<img
-										src={comment.avatar}
+										src={comment.author.avatar}
 										class="rounded-md"
 										alt="avatar"
 										height="48"
@@ -168,14 +138,14 @@
 								</a>
 							</div>
 							<div class="ml-2">
-								<a 
+								<a
 									class="font-semibold"
-									href="/users/{comment.userId}"
+									href="/users/{comment.author.id}"
 								>
-									{comment.username}
+									{comment.author.username}
 								</a>
 								<time class="text-neutral-500"
-									>{dayjs(Date.now()).fromNow()}</time
+									>{dayjs(comment.createdAt).fromNow()}</time
 								>
 							</div>
 						</div>

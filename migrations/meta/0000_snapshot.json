@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "23c5f323-433d-42f6-add3-2533efd9ede3",
+  "id": "a4d7f794-c2ad-4652-972f-c4ede1476150",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "articles": {
@@ -14,11 +14,25 @@
           "notNull": true,
           "autoincrement": true
         },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "author_id": {
           "name": "author_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "title_image": {
+          "name": "title_image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "created_at": {
@@ -63,56 +77,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "article_comment": {
-      "name": "article_comment",
-      "columns": {
-        "article_id": {
-          "name": "article_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "comment_id": {
-          "name": "comment_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "article_comment_article_id_articles_id_fk": {
-          "name": "article_comment_article_id_articles_id_fk",
-          "tableFrom": "article_comment",
-          "tableTo": "articles",
-          "columnsFrom": [
-            "article_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "article_comment_comment_id_comment_id_fk": {
-          "name": "article_comment_comment_id_comment_id_fk",
-          "tableFrom": "article_comment",
-          "tableTo": "comment",
-          "columnsFrom": [
-            "comment_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "comment": {
       "name": "comment",
       "columns": {
@@ -126,6 +90,13 @@
         "author_id": {
           "name": "author_id",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "article_id": {
+          "name": "article_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -161,6 +132,19 @@
           "tableTo": "users",
           "columnsFrom": [
             "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "comment_article_id_articles_id_fk": {
+          "name": "comment_article_id_articles_id_fk",
+          "tableFrom": "comment",
+          "tableTo": "articles",
+          "columnsFrom": [
+            "article_id"
           ],
           "columnsTo": [
             "id"
@@ -276,14 +260,6 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        },
-        "fresh": {
-          "name": "fresh",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
         }
       },
       "indexes": {},
@@ -352,6 +328,20 @@
           "notNull": true,
           "autoincrement": false
         },
+        "about_me": {
+          "name": "about_me",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "email": {
           "name": "email",
           "type": "text",
@@ -359,8 +349,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "hashed_password": {
-          "name": "hashed_password",
+        "password_hash": {
+          "name": "password_hash",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

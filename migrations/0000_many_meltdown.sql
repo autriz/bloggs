@@ -1,36 +1,23 @@
-DROP TABLE IF EXISTS `articles`;--> statement-breakpoint
-DROP TABLE IF EXISTS `article_comment`;--> statement-breakpoint
-DROP TABLE IF EXISTS `comment`;--> statement-breakpoint
-DROP TABLE IF EXISTS `article_tag`;--> statement-breakpoint
-DROP TABLE IF EXISTS `tags_name_unique`;--> statement-breakpoint
-DROP TABLE IF EXISTS `tags`;--> statement-breakpoint
-DROP TABLE IF EXISTS `users_email_unique`;--> statement-breakpoint
-DROP TABLE IF EXISTS `user_session`;--> statement-breakpoint
-DROP TABLE IF EXISTS `users`;--> statement-breakpoint
-
 CREATE TABLE `articles` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`title` text NOT NULL,
 	`author_id` text NOT NULL,
+	`title_image` text,
 	`created_at` integer DEFAULT (strftime('%s', 'now')),
 	`updated_at` integer,
 	`content` text NOT NULL,
 	FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
-CREATE TABLE `article_comment` (
-	`article_id` integer NOT NULL,
-	`comment_id` integer NOT NULL,
-	FOREIGN KEY (`article_id`) REFERENCES `articles`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`comment_id`) REFERENCES `comment`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `comment` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`author_id` text NOT NULL,
+	`article_id` integer NOT NULL,
 	`created_at` integer DEFAULT (strftime('%s', 'now')),
 	`updated_at` integer,
 	`content` text NOT NULL,
-	FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`author_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`article_id`) REFERENCES `articles`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `article_tag` (
@@ -49,7 +36,6 @@ CREATE TABLE `user_session` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`expires_at` integer NOT NULL,
-	`fresh` integer DEFAULT false NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -60,8 +46,10 @@ CREATE TABLE `users` (
 	`first_name` text,
 	`last_name` text,
 	`username` text(32) NOT NULL,
+	`about_me` text,
+	`avatar` text,
 	`email` text NOT NULL,
-	`hashed_password` text NOT NULL
+	`password_hash` text NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `tags_name_unique` ON `tags` (`name`);--> statement-breakpoint

@@ -15,4 +15,18 @@ export type Article = {
 export type FullArticle = Article & {
 	updatedAt: Date;
 	content: string;
+	comments: Comment[];
+};
+
+export type Comment = {
+	id: number;
+	articleId: number;
+	author: {
+		id: string;
+		avatar: string;
+		username: string;
+	};
+	createdAt: Date;
+	updatedAt: Date | null;
+	content: string;
 };

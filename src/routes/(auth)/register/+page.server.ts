@@ -82,11 +82,11 @@ export const actions: Actions = {
 			}); // set session cookie
 
 			console.log("??");
-
-			// redirect to /
-			throw redirect(302, "/");
 		} catch (e) {
 			return error(500, { message: "Failed to create session" });
 		}
+
+		// redirect to /
+		throw redirect(302, "/");
 	},
 };

@@ -2,9 +2,13 @@ import { error, fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.js";
 import { compile, escapeSvelte, type MdsvexCompileOptions } from "mdsvex";
 import { getHighlighter } from "shiki/bundle/full";
-import { insertCommentsSchema } from "$lib/server/schema/comments.js";
+import {
+	commentsTable,
+	insertCommentsSchema,
+} from "$lib/server/schema/comments.js";
 import { ZodError } from "zod";
 import type { Article, FullArticle } from "$lib/types.js";
+import { db } from "$lib/server/database.js";
 
 const mdsvexOptions: MdsvexCompileOptions = {
 	extensions: [".md", ".svx"],
@@ -61,13 +65,32 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 export const actions: Actions = {
 	newComment: async ({ locals, request, params }) => {
 		const formData = Object.fromEntries(await request.formData());
-
 		try {
-			const input = insertCommentsSchema.parse(formData);
+			const content = formData["content"];
 
-			console.log(input);
+			const parsedComment = insertCommentsSchema.parse({
+				articleId: Number(params["articleId"]),
+				authorId: locals.userData!.id,
+				content,
+			});
 
-			return { success: true, data: null, errors: null };
+			const [commentData] = await db
+				.insert(commentsTable)
+				.values(parsedComment)
+				.returning();
+
+			const { authorId, ...rest } = commentData;
+
+			const comment = {
+				...rest,
+				author: {
+					id: locals.userData?.id,
+					avatar: locals.userData?.avatar,
+					username: locals.userData?.username,
+				},
+			};
+
+			return { success: true, data: comment, errors: null };
 		} catch (err) {
 			if (err instanceof ZodError) {
 				const { fieldErrors: errors } = err.flatten();
