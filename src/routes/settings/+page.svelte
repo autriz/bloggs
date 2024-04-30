@@ -8,38 +8,35 @@
 	import userStore from "$lib/stores/userStore.js";
 	import { useUploadThing } from "$lib/utils/uploadthing.js";
 	import { onDestroy } from "svelte";
-	import { get, writable, type Writable } from "svelte/store";
 
 	export let data;
 
 	let imageInput: HTMLInputElement;
 
+	console.log(data.userData);
+
+	let debouncedStores = {
+		username: {
+			timer: undefined,
+			value: data.userData!.username,
+		},
+		firstName: {
+			timer: undefined,
+			value: data.userData!.firstName || "",
+		},
+		lastName: {
+			timer: undefined,
+			value: data.userData!.lastName || "",
+		},
+	};
+
+	$: isUsernameChanging = false;
+	$: isFirstNameChanging = false;
+	$: isLastNameChanging = false;
 	$: isImageUploading = false;
 	$: isEmailChanging = false;
 	$: isPasswordChanging = false;
-
-	let debouncedStores: {
-		[key: string]: Writable<{
-			timer: NodeJS.Timeout;
-			value: string | undefined;
-		}>;
-	} = {
-		username: writable({
-			timer: undefined,
-			value: data.userData!.username,
-		}),
-		firstName: writable({
-			timer: undefined,
-			value: data.userData!.firstName,
-		}),
-		lastName: writable({
-			timer: undefined,
-			value: data.userData!.lastName,
-		}),
-	};
-
-	console.log(data.userData);
-	console.log(get(debouncedStores["username"]));
+	$: isAboutMeChanging = false;
 
 	// const debounce = (name: string, value: string) => {
 	// 	clearTimeout(timer);
@@ -53,10 +50,11 @@
 			userStore.update((user) => {
 				if (!user)
 					goto("/", { replaceState: true, invalidateAll: true });
+				else {
+					user.avatar = res[0].url;
 
-				user!.avatar = res[0].url;
-
-				return user;
+					return user;
+				}
 			});
 
 			const form = new FormData();
@@ -102,16 +100,21 @@
 	) => {
 		e.preventDefault();
 
+		let temp: string;
 		let isPasswordSubmit = e.currentTarget.action.includes("password");
+		let isEmailSubmit = e.currentTarget.action.includes("email");
 
 		if (isPasswordSubmit) {
 			isPasswordChanging = true;
-		} else {
+		} else if (isEmailSubmit) {
 			isEmailChanging = true;
+		} else {
+			isAboutMeChanging = true;
 		}
 
 		let formData = new FormData(e.currentTarget);
-		e.currentTarget.reset();
+		if (!isAboutMeChanging) e.currentTarget.reset();
+		else temp = e.currentTarget.value;
 
 		fetch(e.currentTarget.action, {
 			method: "POST",
@@ -119,26 +122,62 @@
 		}).then((res) => {
 			if (isPasswordSubmit) {
 				isPasswordChanging = false;
-			} else {
+			} else if (isEmailSubmit) {
 				isEmailChanging = false;
+			} else {
+				data.userData!.aboutMe = temp;
+				isAboutMeChanging = false;
 			}
 		});
-	};
-
-	const handleChange = (name: string, value: string) => {
-		console.log(name, value);
 	};
 
 	const handleDebouncedChange = (
 		name: "username" | "firstName" | "lastName",
 		value: string,
 	) => {
-		// clearTimeout(timer);
-		// timer = setTimeout(() => {
-		// 	val = v;
-		// }, 750);
-		console.log(debouncedStores);
-		console.log(debouncedStores[name]);
+		const store = debouncedStores[name];
+
+		store.value = value;
+		clearTimeout(store.timer);
+
+		// @ts-ignore
+		store.timer = setTimeout(async () => {
+			let formData = new FormData();
+			formData.append(name, store.value);
+
+			const res = await fetch(`/api/account/${name}`, {
+				method: "POST",
+				body: formData,
+			});
+
+			if (res.status === 200) {
+				data.userData![name] = store.value;
+			}
+
+			switch (name) {
+				case "username":
+					isUsernameChanging = false;
+					break;
+				case "firstName":
+					isFirstNameChanging = false;
+					break;
+				case "lastName":
+					isLastNameChanging = false;
+					break;
+			}
+		}, 750);
+
+		switch (name) {
+			case "username":
+				isUsernameChanging = true;
+				break;
+			case "firstName":
+				isFirstNameChanging = true;
+				break;
+			case "lastName":
+				isLastNameChanging = true;
+				break;
+		}
 	};
 
 	onDestroy(() => {
@@ -159,7 +198,15 @@
 				bind:value={debouncedStores["username"].value}
 				on:keyup={(v) =>
 					handleDebouncedChange("username", v.currentTarget.value)}
-			/>
+			>
+				<div>
+					{#if isUsernameChanging}
+						<p class="pointer-events-none pl-2 text-sm">
+							Loading...
+						</p>
+					{/if}
+				</div>
+			</TextInput>
 		</SectionGroup>
 		<SectionGroup>
 			<TextInput
@@ -168,14 +215,30 @@
 				bind:value={debouncedStores["firstName"].value}
 				on:keyup={(v) =>
 					handleDebouncedChange("firstName", v.currentTarget.value)}
-			/>
+			>
+				<div>
+					{#if isFirstNameChanging}
+						<p class="pointer-events-none pl-2 text-sm">
+							Loading...
+						</p>
+					{/if}
+				</div>
+			</TextInput>
 			<TextInput
 				name="lastName"
 				label="Фамилия"
 				bind:value={debouncedStores["lastName"].value}
 				on:keyup={(v) =>
 					handleDebouncedChange("lastName", v.currentTarget.value)}
-			/>
+			>
+				<div>
+					{#if isLastNameChanging}
+						<p class="pointer-events-none pl-2 text-sm">
+							Loading...
+						</p>
+					{/if}
+				</div>
+			</TextInput>
 		</SectionGroup>
 	</SettingSection>
 	<SettingSection title="Аватар">
@@ -206,6 +269,33 @@
 					class="hidden"
 					on:change={(e) => handleUpload(e)}
 				/>
+			</div>
+		</SectionGroup>
+	</SettingSection>
+	<SettingSection
+		title="О себе"
+		method="POST"
+		action="/api/account/about-me"
+		on:submit={handleSubmit}
+	>
+		<SectionGroup>
+			<textarea name="content" class="m-3 outline-none"
+				>{data.userData?.aboutMe ?? ""}</textarea
+			>
+		</SectionGroup>
+		<SectionGroup>
+			<div class="pl-[160px]">
+				<button
+					disabled={isAboutMeChanging}
+					class="rounded-md bg-primary/80 px-[10px] py-[7px] text-sm font-bold transition-colors hover:bg-primary"
+					type="submit"
+				>
+					{#if isAboutMeChanging}
+						Подождите...
+					{:else}
+						Подтвердить
+					{/if}
+				</button>
 			</div>
 		</SectionGroup>
 	</SettingSection>
