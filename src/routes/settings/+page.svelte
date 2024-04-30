@@ -135,6 +135,8 @@
 	) => {
 		const store = debouncedStores[name];
 
+		if (value === store.value) return;
+
 		store.value = value;
 		clearTimeout(store.timer);
 
@@ -277,9 +279,9 @@
 		on:submit={handleSubmit}
 	>
 		<SectionGroup>
-			<textarea name="content" class="m-3 outline-none"
-				>{data.userData?.aboutMe ?? ""}</textarea
-			>
+			<textarea name="content" class="m-3 outline-none">
+				{data.userData?.aboutMe ?? ""}
+			</textarea>
 		</SectionGroup>
 		<SectionGroup>
 			<div class="pl-[160px]">
