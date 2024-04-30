@@ -12,17 +12,17 @@ dependencies:
     specifier: ^3.0.1
     version: 3.0.1(carta-md@3.6.1)(marked@12.0.1)
   '@libsql/client':
-    specifier: ^0.5.6
-    version: 0.5.6
+    specifier: ^0.6.0
+    version: 0.6.0
   '@lucia-auth/adapter-sqlite':
     specifier: ^3.0.1
-    version: 3.0.1(@libsql/client@0.5.6)(lucia@3.1.1)
+    version: 3.0.1(@libsql/client@0.6.0)(lucia@3.1.1)
   '@sentry/sveltekit':
     specifier: ^7.111.0
     version: 7.111.0(@sveltejs/kit@2.5.5)(svelte@4.2.12)
   '@uploadthing/svelte':
-    specifier: 6.4.2-canary.78bad92
-    version: 6.4.2-canary.78bad92(svelte@4.2.12)(uploadthing@6.7.0)
+    specifier: 6.5.1
+    version: 6.5.1(svelte@4.2.12)(uploadthing@6.10.1)
   '@vercel/speed-insights':
     specifier: ^1.0.10
     version: 1.0.10(@sveltejs/kit@2.5.5)(svelte@4.2.12)
@@ -39,8 +39,8 @@ dependencies:
     specifier: ^16.4.5
     version: 16.4.5
   drizzle-orm:
-    specifier: ^0.30.6
-    version: 0.30.6(@libsql/client@0.5.6)
+    specifier: ^0.30.9
+    version: 0.30.9(@libsql/client@0.6.0)
   hash-wasm:
     specifier: ^4.11.0
     version: 4.11.0
@@ -60,8 +60,8 @@ dependencies:
     specifier: ^1.2.3
     version: 1.2.3
   uploadthing:
-    specifier: ^6.7.0
-    version: 6.7.0(tailwindcss@3.4.3)
+    specifier: ^6.10.1
+    version: 6.10.1(tailwindcss@3.4.3)
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^1.42.1
     version: 1.42.1
   '@sveltejs/adapter-vercel':
-    specifier: ^5.2.0
-    version: 5.2.0(@sveltejs/kit@2.5.5)
+    specifier: ^5.3.0
+    version: 5.3.0(@sveltejs/kit@2.5.5)
   '@sveltejs/kit':
     specifier: ^2.5.5
     version: 2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.12)(vite@5.2.7)
@@ -102,7 +102,7 @@ devDependencies:
     version: 0.20.14
   drizzle-zod:
     specifier: ^0.5.1
-    version: 0.5.1(drizzle-orm@0.30.6)(zod@3.22.4)
+    version: 0.5.1(drizzle-orm@0.30.9)(zod@3.22.4)
   mdsvex:
     specifier: ^0.11.0
     version: 0.11.0(svelte@4.2.12)
@@ -246,6 +246,16 @@ packages:
     dependencies:
       superjson: 2.2.1
     dev: true
+
+  /@effect/schema@0.66.12(effect@3.1.0)(fast-check@3.18.0):
+    resolution: {integrity: sha512-14X3D2FxTFDtll41MWw5OkLQCWqcs6pLYhs38oRK1o7rQ9gM2fdL4sw/gJu4dayAqv122GMgoIEOrzO5PyBuYA==}
+    peerDependencies:
+      effect: ^3.1.0
+      fast-check: ^3.13.2
+    dependencies:
+      effect: 3.1.0
+      fast-check: 3.18.0
+    dev: false
 
   /@emnapi/core@1.1.1:
     resolution: {integrity: sha512-eu4KjHfXg3I+UUR7vSuwZXpRo4c8h4Rtb5Lu2F7Z4JqJFl/eidquONEBiRs6viXKpWBC3BaJBy68xGJ2j56idw==}
@@ -943,20 +953,19 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@libsql/client@0.5.6:
-    resolution: {integrity: sha512-UBjmDoxz75Z2sHdP+ETCROpeLA/77VMesiff8R4UWK1rnaWbh6/YoCLDILMJL3Rh0udQeKxjL8MjXthqohax+g==}
+  /@libsql/client@0.6.0:
+    resolution: {integrity: sha512-qhQzTG/y2IEVbL3+9PULDvlQFWJ/RnjFXECr/Nc3nRngGiiMysDaOV5VUzYk7DulUX98EA4wi+z3FspKrUplUA==}
     dependencies:
-      '@libsql/core': 0.5.6
-      '@libsql/hrana-client': 0.5.6
+      '@libsql/core': 0.6.0
+      '@libsql/hrana-client': 0.6.0
       js-base64: 3.7.7
       libsql: 0.3.10
     transitivePeerDependencies:
       - bufferutil
-      - encoding
       - utf-8-validate
 
-  /@libsql/core@0.5.6:
-    resolution: {integrity: sha512-3vicUAydq6jPth410n4AsHHm1n2psTwvkSf94nfJlSXutGSZsl0updn2N/mJBgqUHkbuFoWZtlMifF0SwBj1xQ==}
+  /@libsql/core@0.6.0:
+    resolution: {integrity: sha512-affAB8vSqQwqI9NBDJ5uJCVaHoOAS2pOpbv1kWConh1SBbmJBnHHd4KG73RAJ2sgd2+NbT9WA+XJBqxgp28YSw==}
     dependencies:
       js-base64: 3.7.7
 
@@ -974,25 +983,19 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@libsql/hrana-client@0.5.6:
-    resolution: {integrity: sha512-mjQoAmejZ1atG+M3YR2ZW+rg6ceBByH/S/h17ZoYZkqbWrvohFhXyz2LFxj++ARMoY9m6w3RJJIRdJdmnEUlFg==}
+  /@libsql/hrana-client@0.6.0:
+    resolution: {integrity: sha512-k+fqzdjqg3IvWfKmVJK5StsbjeTcyNAXFelUbXbGNz3yH1gEVT9mZ6kmhsIXP30ZSyVV0AE1Gi25p82mxC9hwg==}
     dependencies:
-      '@libsql/isomorphic-fetch': 0.1.12
+      '@libsql/isomorphic-fetch': 0.2.1
       '@libsql/isomorphic-ws': 0.1.5
       js-base64: 3.7.7
       node-fetch: 3.3.2
     transitivePeerDependencies:
       - bufferutil
-      - encoding
       - utf-8-validate
 
-  /@libsql/isomorphic-fetch@0.1.12:
-    resolution: {integrity: sha512-MRo4UcmjAGAa3ac56LoD5OE13m2p0lu0VEtZC2NZMcogM/jc5fU9YtMQ3qbPjFJ+u2BBjFZgMPkQaLS1dlMhpg==}
-    dependencies:
-      '@types/node-fetch': 2.6.11
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
+  /@libsql/isomorphic-fetch@0.2.1:
+    resolution: {integrity: sha512-Sv07QP1Aw8A5OOrmKgRUBKe2fFhF2hpGJhtHe3d1aRnTESZCGkn//0zDycMKTGamVWb3oLYRroOsCV8Ukes9GA==}
 
   /@libsql/isomorphic-ws@0.1.5:
     resolution: {integrity: sha512-DtLWIH29onUYR00i0GlQ3UdcTRC6EP4u9w/h9LxpUZJWRMARk6dQwZ6Jkd+QdwVpuAOrdxt18v0K2uIYR3fwFg==}
@@ -1038,7 +1041,7 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@lucia-auth/adapter-sqlite@3.0.1(@libsql/client@0.5.6)(lucia@3.1.1):
+  /@lucia-auth/adapter-sqlite@3.0.1(@libsql/client@0.6.0)(lucia@3.1.1):
     resolution: {integrity: sha512-bzr8+HALrbiYMb/+oL1SAnjbgFqlPs/Kj4lO57t/VvbXzmbpQEKk5Nv6hMpvWSkGAR9LbxYeQAtecikpKZVB0w==}
     peerDependencies:
       '@libsql/client': ^0.3.0
@@ -1050,7 +1053,7 @@ packages:
       better-sqlite3:
         optional: true
     dependencies:
-      '@libsql/client': 0.5.6
+      '@libsql/client': 0.6.0
       lucia: 3.1.1
     dev: false
 
@@ -1838,14 +1841,14 @@ packages:
     resolution: {integrity: sha512-Yb3ewAUq7QwLbU+vF28dxkOmBJG5bHUVWZWQBnUt2GIhVWdiShKcE6kBMsCRXvD8AuK7gy0rR4qNckqZnCzEFw==}
     dev: false
 
-  /@sveltejs/adapter-vercel@5.2.0(@sveltejs/kit@2.5.5):
-    resolution: {integrity: sha512-872y13DxKcOBxgnXc4C2YHRw1ow9N1CpUxMH34NYFqCn6PUO6f34qle8v/Byr8sHEC/d+PZIAI3MJs3c8f7TfA==}
+  /@sveltejs/adapter-vercel@5.3.0(@sveltejs/kit@2.5.5):
+    resolution: {integrity: sha512-JzTJVmAWmbyNe3pQU2l0M1ggt4FjIVnKHEQOrqW4XVxYtNGdq3znuMqFSdzsR+5LaIEFqZaLIpm82XZsZroBoQ==}
     peerDependencies:
       '@sveltejs/kit': ^2.4.0
     dependencies:
       '@sveltejs/kit': 2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.12)(vite@5.2.7)
       '@vercel/nft': 0.26.4
-      esbuild: 0.19.12
+      esbuild: 0.20.2
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -1958,12 +1961,6 @@ packages:
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
-  /@types/node-fetch@2.6.11:
-    resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
-    dependencies:
-      '@types/node': 20.12.2
-      form-data: 4.0.0
-
   /@types/node@20.12.2:
     resolution: {integrity: sha512-zQ0NYO87hyN6Xrclcqp7f8ZbXNbRfoGWNcMvHTPQp9UUrwI0mI7XBz+cu7/W6/VClYo2g63B0cjull/srU7LgQ==}
     dependencies:
@@ -1992,12 +1989,13 @@ packages:
     dependencies:
       '@types/node': 20.12.2
 
-  /@uploadthing/dropzone@0.2.2-canary.78bad92(svelte@4.2.12):
-    resolution: {integrity: sha512-QyordZ98pnnYS8e4528vFqjXp//ObBtyOHIX9p+RlUXSNGDE4rmZu7IbPDsf2Qw8LJ051W5eounPQ98F4iXj/g==}
+  /@uploadthing/dropzone@0.4.0(svelte@4.2.12):
+    resolution: {integrity: sha512-IZmmUu3vSSmUoToSf6CTprSlMJuQ2n75u7XcXrNjPG4TgyQpSiYPKqkdHV2/JPzsXfzITM+i3SPW5Ez3fdGQnA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       solid-js: ^1.7.11
       svelte: ^4.2.12
+      vue: ^3.4.0
     peerDependenciesMeta:
       react:
         optional: true
@@ -2005,53 +2003,48 @@ packages:
         optional: true
       svelte:
         optional: true
+      vue:
+        optional: true
     dependencies:
       file-selector: 0.6.0
       svelte: 4.2.12
     dev: false
 
-  /@uploadthing/mime-types@0.2.6:
-    resolution: {integrity: sha512-mB7XAKy5ARltUWZxb2oE0OwUW5Wplxi7Z3cqCvf/ZFvQ1E6lcGVNNKbmJI8c4GaONyEYnalo0Yl228zzHzyZnQ==}
+  /@uploadthing/mime-types@0.2.9:
+    resolution: {integrity: sha512-7Ap2evP+niXNSXoOck4DUZUAKYrMRRpJ85n+ZxCuRsnr3iziOgv/Rt6es5SnMVgE/aOObxddOxbrxyOhISQWHQ==}
     dev: false
 
-  /@uploadthing/shared@6.4.0(@uploadthing/mime-types@0.2.6):
-    resolution: {integrity: sha512-N2fYHl5pfOjrRyEXFNyKf8gLqYiSSsPE71Vky7Efbze/tgCcX9J4H4UXPSHS4Ty2w6A2xeZgGtJRjCXv9lXjaQ==}
+  /@uploadthing/shared@6.7.1(@uploadthing/mime-types@0.2.9):
+    resolution: {integrity: sha512-4Imk46n+rwFaobfDuDSclYcH/OcpJA048Ww0il6nqT7EoXQ7Pa9NJfGkoNkS8+K8rT71IVljdaiaLEapgRxj0Q==}
     peerDependencies:
-      '@uploadthing/mime-types': 0.2.6
+      '@uploadthing/mime-types': 0.2.9
     peerDependenciesMeta:
       '@uploadthing/mime-types':
         optional: true
     dependencies:
-      '@uploadthing/mime-types': 0.2.6
+      '@effect/schema': 0.66.12(effect@3.1.0)(fast-check@3.18.0)
+      '@uploadthing/mime-types': 0.2.9
+      effect: 3.1.0
+      fast-check: 3.18.0
       std-env: 3.7.0
     dev: false
 
-  /@uploadthing/shared@6.4.1-canary.78bad92:
-    resolution: {integrity: sha512-7BFztL6o/IIRcvIwJ6UyAnfk+Pstp9zd9DiQ9PWXKhX2cKZ2Vd2H9O/K/AKL8ULkRQovC2r2s+TbwEwa5NG7+A==}
-    peerDependencies:
-      '@uploadthing/mime-types': 0.2.7-canary.78bad92
-    peerDependenciesMeta:
-      '@uploadthing/mime-types':
-        optional: true
-    dependencies:
-      std-env: 3.7.0
-    dev: false
-
-  /@uploadthing/svelte@6.4.2-canary.78bad92(svelte@4.2.12)(uploadthing@6.7.0):
-    resolution: {integrity: sha512-l/kXDxxZa7ZzWvWqJAUEmTbYfxU4rZH8L/yYgAmupRIxXH1TTjQC9KCTtk3HkyUS2FlmGKJKJefkfchUOWT5DQ==}
+  /@uploadthing/svelte@6.5.1(svelte@4.2.12)(uploadthing@6.10.1):
+    resolution: {integrity: sha512-MdFdiVdNAgjAVVZTRON2NxbIGuuk0QM2dUsyPQJt2V6wyCZD+s1mbzHKfo6ooEVpcwMVClXViYeuvPVDq8e+qA==}
     peerDependencies:
       svelte: ^4.0.0
-      uploadthing: workspace:6.5.2
+      uploadthing: 6.10.1
     dependencies:
-      '@uploadthing/dropzone': 0.2.2-canary.78bad92(svelte@4.2.12)
-      '@uploadthing/shared': 6.4.1-canary.78bad92
+      '@uploadthing/dropzone': 0.4.0(svelte@4.2.12)
+      '@uploadthing/shared': 6.7.1(@uploadthing/mime-types@0.2.9)
       svelte: 4.2.12
       tailwind-merge: 2.2.2
-      uploadthing: 6.7.0(tailwindcss@3.4.3)
+      uploadthing: 6.10.1(tailwindcss@3.4.3)
     transitivePeerDependencies:
       - '@uploadthing/mime-types'
       - react
       - solid-js
+      - vue
     dev: false
 
   /@vercel/nft@0.26.4:
@@ -2217,6 +2210,7 @@ packages:
 
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+    dev: false
 
   /autoprefixer@10.4.19(postcss@8.4.38):
     resolution: {integrity: sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==}
@@ -2502,6 +2496,7 @@ packages:
     engines: {node: '>= 0.8'}
     dependencies:
       delayed-stream: 1.0.0
+    dev: false
 
   /commander@4.1.1:
     resolution: {integrity: sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==}
@@ -2686,6 +2681,7 @@ packages:
   /delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
+    dev: false
 
   /delegates@1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
@@ -2809,8 +2805,8 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.30.6(@libsql/client@0.5.6):
-    resolution: {integrity: sha512-8RgNUmY7J03GRuRgBV5SaJNbYgLVPjdSWNS/bRkIMIHt2TFCA439lJsNpqYX8asyKMqkw8ceBiamUnCIXZIt9w==}
+  /drizzle-orm@0.30.9(@libsql/client@0.6.0):
+    resolution: {integrity: sha512-VOiCFsexErmgqvNCOmbzmqDCZzZsHoz6SkWAjTFxsTr1AllKDbDJ2+GgedLXsXMDgpg/ljDG1zItIFeZtiO2LA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -2824,7 +2820,7 @@ packages:
       '@types/pg': '*'
       '@types/react': '>=18'
       '@types/sql.js': '*'
-      '@vercel/postgres': '*'
+      '@vercel/postgres': '>=0.8.0'
       '@xata.io/client': '*'
       better-sqlite3: '>=7'
       bun-types: '*'
@@ -2889,20 +2885,24 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@libsql/client': 0.5.6
+      '@libsql/client': 0.6.0
 
-  /drizzle-zod@0.5.1(drizzle-orm@0.30.6)(zod@3.22.4):
+  /drizzle-zod@0.5.1(drizzle-orm@0.30.9)(zod@3.22.4):
     resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
     peerDependencies:
       drizzle-orm: '>=0.23.13'
       zod: '*'
     dependencies:
-      drizzle-orm: 0.30.6(@libsql/client@0.5.6)
+      drizzle-orm: 0.30.9(@libsql/client@0.6.0)
       zod: 3.22.4
     dev: true
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
+
+  /effect@3.1.0:
+    resolution: {integrity: sha512-A0kUH8qeH0jS0X4ViJXf/O5qfMQBrJRsTD1xHed4jpFF5ChUP96LmseaV9LQkFbVDo791REFWTOlMPGCyM/0Ng==}
+    dev: false
 
   /electron-to-chromium@1.4.723:
     resolution: {integrity: sha512-rxFVtrMGMFROr4qqU6n95rUi9IlfIm+lIAt+hOToy/9r6CDv0XiEcQdC3VP71y1pE5CFTzKV0RvxOGYCPWWHPw==}
@@ -3361,6 +3361,13 @@ packages:
       type: 2.7.2
     dev: true
 
+  /fast-check@3.18.0:
+    resolution: {integrity: sha512-/951xaT0kA40w0GXRsZXEwSTE7LugjZtSA/8vPgFkiPQ8wNp8tRvqWuNDHBgLxJYXtsK11e/7Q4ObkKW5BdTFQ==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      pure-rand: 6.1.0
+    dev: false
+
   /fast-glob@3.3.2:
     resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
     engines: {node: '>=8.6.0'}
@@ -3433,6 +3440,7 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
+    dev: false
 
   /formdata-polyfill@4.0.10:
     resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
@@ -4115,12 +4123,14 @@ packages:
   /mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
+    dev: false
 
   /mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
     dependencies:
       mime-db: 1.52.0
+    dev: false
 
   /min-indent@1.0.1:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
@@ -4731,6 +4741,10 @@ packages:
   /punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+    dev: false
+
+  /pure-rand@6.1.0:
+    resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
     dev: false
 
   /qs@6.12.0:
@@ -5439,8 +5453,8 @@ packages:
       picocolors: 1.0.0
     dev: true
 
-  /uploadthing@6.7.0(tailwindcss@3.4.3):
-    resolution: {integrity: sha512-meWUtFcESRTnmn0vvis6GH07tuQ73sZVYwlQBzspPy2XJq+4fJQ6S9j3sXbp/ocrpc6UyeiMLfM+QURzAtv5lA==}
+  /uploadthing@6.10.1(tailwindcss@3.4.3):
+    resolution: {integrity: sha512-xqgEauaDYLlQ6NEsQWF+fpsUOuniWazd8ytSK2bCxcKFGakCkXO32GkFolW4iZZgkl7ATnHwN+JXG95FPdo74w==}
     engines: {node: '>=18.13.0'}
     peerDependencies:
       express: '*'
@@ -5460,9 +5474,12 @@ packages:
       tailwindcss:
         optional: true
     dependencies:
-      '@uploadthing/mime-types': 0.2.6
-      '@uploadthing/shared': 6.4.0(@uploadthing/mime-types@0.2.6)
+      '@effect/schema': 0.66.12(effect@3.1.0)(fast-check@3.18.0)
+      '@uploadthing/mime-types': 0.2.9
+      '@uploadthing/shared': 6.7.1(@uploadthing/mime-types@0.2.9)
       consola: 3.2.3
+      effect: 3.1.0
+      fast-check: 3.18.0
       std-env: 3.7.0
       tailwindcss: 3.4.3
     dev: false
