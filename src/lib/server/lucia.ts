@@ -13,10 +13,10 @@ export const auth = new Lucia(adapter, {
 		return {
 			username: attributes.username,
 			email: attributes.email,
-			firstName: attributes.firstName,
-			lastName: attributes.lastName,
+			firstName: attributes.first_name,
+			lastName: attributes.last_name,
 			avatar: attributes.avatar,
-			aboutMe: attributes.aboutMe,
+			aboutMe: attributes.about_me,
 		};
 	},
 	sessionExpiresIn: new TimeSpan(7, "d"),
@@ -44,8 +44,8 @@ interface DatabaseSessionAttributes {}
 interface DatabaseUserAttributes {
 	username: string;
 	email: string;
-	firstName: string | null;
-	lastName: string | null;
+	first_name: string | null;
+	last_name: string | null;
 	avatar: string | null;
-	aboutMe: string | null;
+	about_me: string | null;
 }
