@@ -36,7 +36,7 @@ export async function POST({ locals, params, request }) {
 
 		const isValidPassword = await argon2Verify({
 			hash: passwordHash,
-			password: currentPassword,
+			password: currentPassword.toString(),
 		});
 
 		if (!isValidPassword) error(406, { message: "Invalid password" });

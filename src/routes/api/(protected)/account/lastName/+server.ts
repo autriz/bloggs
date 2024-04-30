@@ -9,13 +9,13 @@ export async function POST({ locals, params, request }) {
 
 	try {
 		const formData = await request.formData();
-		const avatarUrl = formData.get("avatar_url");
+		const lastName = formData.get("lastName");
 
-		if (!avatarUrl) error(404, { message: "Image URL not found" });
+		if (!lastName) error(404, { message: "Last name not provided" });
 
 		await db
 			.update(usersTable)
-			.set({ avatar: avatarUrl.toString() })
+			.set({ lastName: lastName.toString() })
 			.where(eq(usersTable.id, locals.userData.id));
 
 		return new Response();
