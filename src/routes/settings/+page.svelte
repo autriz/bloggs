@@ -6,14 +6,12 @@
 		TextInput,
 	} from "$lib/components/settings/index.js";
 	import userStore from "$lib/stores/userStore.js";
-	import { useUploadThing } from "$lib/utils/uploadthing.js";
+	import { createUploadThing } from "$lib/utils/uploadthing.js";
 	import { onDestroy } from "svelte";
 
 	export let data;
 
 	let imageInput: HTMLInputElement;
-
-	console.log(data.userData);
 
 	let debouncedStores = {
 		username: {
@@ -45,7 +43,7 @@
 	// 	}, 750);
 	// };
 
-	const { startUpload } = useUploadThing("imageUploader", {
+	const { startUpload } = createUploadThing("imageUploader", {
 		onClientUploadComplete: (res: any) => {
 			userStore.update((user) => {
 				if (!user)
