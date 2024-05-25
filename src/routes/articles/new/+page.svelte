@@ -5,77 +5,67 @@
 	import "carta-md/default-theme.css";
 	import { getCarta } from "$lib/utils.js";
 
-	let isEditing = true;
-
-	let value = "";
-	let compiledValue = "";
-
-	let carta = getCarta();
+	let titleValue = "";
 	let editorValue = "";
 
-	async function parseText() {
-		const response = await fetch("/articles/new", { method: "POST" });
-		const { text } = await response.json();
-		console.log(text);
+	let carta = getCarta();
+
+	async function handleSubmit() {
+		console.log(titleValue);
+		console.log(editorValue);
+
+		const formData = new FormData();
+
+		formData.append("title", titleValue);
+		formData.append("content", editorValue);
+
+		fetch("/api/articles/new", {
+			method: "POST",
+			body: formData
+		}).then(async (res) => {
+			if (res.redirected) {
+				goto(res.url);
+			}
+		});
 	}
 </script>
 
 <div class="mx-10 mb-[60px] mt-[100px] h-fit min-h-full w-full">
-	<CartaEditor {carta} bind:value={editorValue} mode="split" />
 	<div class="flex h-full w-full max-w-[95ch] flex-col md:flex-row">
-		<div
-			class="mr-5 flex w-full flex-col items-end justify-center rounded-md border border-border bg-card md:w-[260px]"
-		>
-			<div>Название:</div>
-			<div>Теги:</div>
-		</div>
-		<div class="mt-2 flex h-full w-full flex-col md:grow">
-			<div class="flex w-full">
-				<!-- <form method="POST" action="/articles/new?/postArticle" use:enhance>
-					<button type="submit">Submit</button>
-				</form> -->
-				<button
-					class="w-[50%] rounded-tl-md border-b border-border bg-card px-3 py-1"
-					on:click={() => {
-						isEditing = true;
-					}}>Edit</button
-				>
-				<button
-					class="w-[50%] rounded-tr-md border-b border-border bg-card px-3 py-1"
-					on:click={() => {
-						isEditing = false;
-						parseText();
-					}}>Preview</button
-				>
-			</div>
-			<div
-				class="grow rounded-b-md border-b border-l border-r border-border bg-card md:w-full"
+		<div class="flex flex-row-reverse items-center justify-end py-[10px]">
+			<input
+				class="peer flex h-8 w-full max-w-[250px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground invalid:ring-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+				name="title"
+				bind:value={titleValue}
+				on:keyup
+			/>
+			<label
+				for="title"
+				class="w-[160px] pb-0 pr-[10px] text-right text-sm text-secondary-foreground"
 			>
-				{#if isEditing}
-					<div class="h-full overflow-scroll">
-						{value}
-					</div>
-					<!-- <textarea class="h-full w-full rounded-md" bind:value /> -->
-				{:else}
-					<article>
-						{@html compiledValue}
-					</article>
-				{/if}
-			</div>
-			<div class="my-2 flex justify-end gap-1">
-				<button
-					class="rounded-sm border border-border bg-secondary px-3 py-1"
-					on:click={() => {
-						// post
-					}}>Создать</button
-				>
-				<button
-					class="rounded-sm border border-border bg-secondary px-3 py-1"
-					on:click={() => {
-						goto("/");
-					}}>Отмена</button
-				>
-			</div>
+				Название поста
+			</label>
+		</div>
+	</div>
+	<CartaEditor {carta} bind:value={editorValue} mode="split" />
+	<div class="mt-2 flex h-full w-full flex-col md:grow">
+		<div class="my-2 flex justify-end gap-1">
+			<button
+				class="rounded-sm border border-border bg-primary px-3 py-1"
+				on:click={() => {
+					handleSubmit();
+				}}
+			>
+					Создать
+			</button>
+			<button
+				class="rounded-sm border border-border bg-secondary px-3 py-1"
+				on:click={() => {
+					goto("/");
+				}}
+			>
+				Отмена
+			</button>
 		</div>
 	</div>
 </div>
