@@ -42,7 +42,7 @@
 			<a
 				href={link.url}
 				data-sveltekit-noscroll
-				class="relative rounded-md px-3 py-2"
+				class="relative rounded-md px-3 py-2 text-lg"
 			>
 				{link.name}
 				{#if $page.url.pathname === link.url}
