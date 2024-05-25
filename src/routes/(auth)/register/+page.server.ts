@@ -68,20 +68,16 @@ export const actions: Actions = {
 				passwordHash,
 			})
 			.returning({ id: usersTable.id });
-		console.log("create user");
 		console.log(user);
 
 		try {
 			const session = await auth.createSession(user.id, {});
-			console.log("create session");
 			const sessionCookie = auth.createSessionCookie(session.id);
 
 			cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: ".",
 				...sessionCookie.attributes,
 			}); // set session cookie
-
-			console.log("??");
 		} catch (e) {
 			return error(500, { message: "Failed to create session" });
 		}
