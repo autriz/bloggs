@@ -1,8 +1,17 @@
+This is a project developed during the course of writing a term paper using SvelteKit Turso Drizzle template with Sentry.
+
+> [!WARNING]
+> This project does not have localization and written in my native language and has some bugs.
+
 # SvelteKit Turso Drizzle
 
 ## Setup Turso
 
 Follow the steps to setup your Turso development database (Using Turso for dev and prod seems like a good idea).
+
+## Setup Sentry
+
+Follow this [install guide](https://docs.sentry.io/platforms/javascript/guides/sveltekit/#install).
 
 ## Add a .env file with the correct values
 
